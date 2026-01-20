@@ -142,6 +142,7 @@ class ComiteActaController
     {
         $comite    = $this->comiteModel->getById($idComite);
         $detalles  = $this->detalleModel->getByComite($idComite);
+        $anioActa = date("Y", strtotime($comite["fecha"]));
 
         if (empty($detalles)) {
             throw new Exception("No existen casos registrados para este comité.");
@@ -167,6 +168,8 @@ class ComiteActaController
         $riesgo_nombre    = trim($_SESSION["user"]["apellidos"] . " " . $_SESSION["user"]["nombres"]);
 
         $fechaLarga = $this->convertirFechaLarga($comite["fecha"]);
+        
+
 
         /* ======================
         TABLA DE CASOS
@@ -261,7 +264,7 @@ class ComiteActaController
         $html = file_get_contents($templatePath);
 
         $buscar = [
-            '${correlativo}', '${agencia}', '${hora}', '${fecha_larga}', '${numero_casos}',
+            '${correlativo}', '${anio}', '${agencia}', '${hora}', '${fecha_larga}', '${numero_casos}',
             '${tabla_casos}', '${bloque_vinculados}', '${tipo_comite}',
 
             '${oficial_riesgos}', '${modalidad_riesgo}',
@@ -274,6 +277,7 @@ class ComiteActaController
 
         $reemplazar = [
             $d0["correlativo"],
+            $anioActa,
             $agencia["nombre_agencia"],
             $comite["hora"],
             $fechaLarga,

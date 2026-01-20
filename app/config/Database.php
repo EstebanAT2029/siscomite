@@ -18,7 +18,7 @@ class Database
             self::$instance = new mysqli($host, $user, $pass, $dbname, $port);
 
             if (self::$instance->connect_error) {
-                die("Error de conexión: " . self::$instance->connect_error);
+                die("Error de conexi贸n: " . self::$instance->connect_error);
             }
 
             self::$instance->set_charset("utf8mb4");

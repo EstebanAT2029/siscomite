@@ -1,7 +1,7 @@
 <?php
 
 $usuarios = [
-    ["Hoyos Correa","Cristian","20051842","choyos@agrobanco.com.pe","999999999","choyos",3],
+    ["Hoyos Correa","Cristian","42281562","choyos@agrobanco.com.pe","999999999","choyos",3],
 ];
 
 foreach ($usuarios as $u) {
