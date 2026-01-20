@@ -6,7 +6,7 @@ class AuthModel
 
     public function __construct()
     {
-        $this->db = Database::getConnection();
+        $this->db = Database::getConnection(); // mysqli
     }
 
     public function login($usuario, $password)
@@ -39,8 +39,8 @@ class AuthModel
 
         // Si no existe usuario → timing attack protection
         if ($result->num_rows === 0) {
-            // Comparación falsa para evitar detectar tiempos diferentes
             password_verify($password, password_hash("dummy_password", PASSWORD_BCRYPT));
+            $stmt->close();
             return false;
         }
 
@@ -49,20 +49,83 @@ class AuthModel
         // =========================================
         // Verificar estado del usuario
         // =========================================
-        if ($user["estado"] != 1) {
-            return false; // usuario inactivo no puede ingresar
+        if ((int)$user["estado"] !== 1) {
+            $stmt->close();
+            return false;
         }
 
         // =========================================
         // Verificación segura de contraseña (bcrypt)
         // =========================================
         if (!password_verify($password, $user["password"])) {
+            $stmt->close();
             return false;
         }
 
-        // Cerrar recursos
         $stmt->close();
-
         return $user;
+    }
+
+    /* =========================================================
+       NUEVO: Obtener todas las zonas asignadas a un usuario
+       Tabla: usuario_zona (id_usuario, id_zona, estado)
+       Tabla: zonas (id, nombre)
+    ========================================================= */
+    public function getZonasByUsuario($userId)
+    {
+        $userId = (int)$userId;
+
+        $sql = "SELECT z.id, z.nombre
+                FROM usuario_zona uz
+                INNER JOIN zonas z ON z.id = uz.id_zona
+                WHERE uz.id_usuario = ? AND uz.estado = 1
+                ORDER BY z.nombre ASC";
+
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $zonas = [];
+        while ($row = $result->fetch_assoc()) {
+            $zonas[] = $row;
+        }
+
+        $stmt->close();
+        return $zonas;
+    }
+
+    /* =========================================================
+       NUEVO: Validar que una zona pertenezca al usuario
+       Retorna la zona (id, nombre) si es válida, sino false
+    ========================================================= */
+    public function zonaPerteneceAUsuario($userId, $zonaId)
+    {
+        $userId = (int)$userId;
+        $zonaId = (int)$zonaId;
+
+        $sql = "SELECT z.id, z.nombre
+                FROM usuario_zona uz
+                INNER JOIN zonas z ON z.id = uz.id_zona
+                WHERE uz.id_usuario = ? AND uz.id_zona = ? AND uz.estado = 1
+                LIMIT 1";
+
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return false;
+
+        $stmt->bind_param("ii", $userId, $zonaId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            $stmt->close();
+            return false;
+        }
+
+        $zona = $result->fetch_assoc();
+        $stmt->close();
+        return $zona;
     }
 }

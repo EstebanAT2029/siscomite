@@ -23,7 +23,64 @@ class AuthController
     public function login()
     {
         // ==============================
-        // Sanitizar y validar entrada
+        // Paso (login o selección zona)
+        // ==============================
+        $step = $_POST["step"] ?? "login";
+
+        // ==============================
+        // PASO 2: Selección de zona
+        // ==============================
+        if ($step === "zona") {
+
+            if (!isset($_SESSION["tmp_user"])) {
+                header("Location: index.php?url=login");
+                exit;
+            }
+
+            $zona_id = (int)($_POST["zona_id"] ?? 0);
+
+            if ($zona_id <= 0) {
+                $error = "Debe seleccionar una zona válida.";
+                $zonas = $_SESSION["tmp_zonas"];
+                $usuario = $_SESSION["tmp_user"]["usuario"];
+                $mostrarZonas = true;
+                require __DIR__ . "/../views/auth/login.php";
+                return;
+            }
+
+            // Validar que la zona pertenezca al usuario
+            $valida = $this->model->zonaPerteneceAUsuario(
+                $_SESSION["tmp_user"]["id"],
+                $zona_id
+            );
+
+            if (!$valida) {
+                $error = "La zona seleccionada no está asignada a su usuario.";
+                $zonas = $_SESSION["tmp_zonas"];
+                $usuario = $_SESSION["tmp_user"]["usuario"];
+                $mostrarZonas = true;
+                require __DIR__ . "/../views/auth/login.php";
+                return;
+            }
+
+            // Seguridad de sesión
+            session_regenerate_id(true);
+
+            // Sesión definitiva
+            $_SESSION["user"] = $_SESSION["tmp_user"];
+            $_SESSION["zona_activa"] = [
+                "id" => $valida["id"],
+                "nombre" => $valida["nombre"]
+            ];
+
+            unset($_SESSION["tmp_user"], $_SESSION["tmp_zonas"]);
+
+            header("Location: index.php?url=dashboard");
+            exit;
+        }
+
+        // ==============================
+        // PASO 1: Login normal
         // ==============================
         $usuario  = trim($_POST["usuario"] ?? "");
         $password = trim($_POST["password"] ?? "");
@@ -34,52 +91,82 @@ class AuthController
             exit;
         }
 
-        // Evitar ataques de fuerza bruta
+        // Anti fuerza bruta
         if (!isset($_SESSION["login_attempts"])) {
             $_SESSION["login_attempts"] = 0;
         }
 
         if ($_SESSION["login_attempts"] >= 5) {
-            sleep(2); // Anti brute force delay
+            sleep(2);
             $_SESSION["login_error"] = "Demasiados intentos. Intente nuevamente en unos minutos.";
             header("Location: index.php?url=login");
             exit;
         }
 
-        // ==============================
-        // Consulta segura al modelo
-        // ==============================
         $user = $this->model->login($usuario, $password);
 
         if (!$user) {
             $_SESSION["login_attempts"]++;
-            sleep(1); // Añade delay para ataques automatizados
+            sleep(1);
             $_SESSION["login_error"] = "Usuario o contraseña incorrectos.";
             header("Location: index.php?url=login");
             exit;
         }
 
-        // Resetear intentos fallidos
         $_SESSION["login_attempts"] = 0;
 
         // ==============================
-        // Seguridad de sesión
+        // Obtener zonas asignadas
         // ==============================
-        session_regenerate_id(true); // Previene fijación de sesión
+        $zonas = $this->model->getZonasByUsuario($user["id"]);
 
-        $_SESSION["user"] = [
+        if (count($zonas) === 0) {
+            $_SESSION["login_error"] = "Usuario sin zonas asignadas.";
+            header("Location: index.php?url=login");
+            exit;
+        }
+
+        // ==============================
+        // UNA sola zona → entra directo
+        // ==============================
+        if (count($zonas) === 1) {
+
+            session_regenerate_id(true);
+
+            $_SESSION["user"] = [
+                "id"        => $user["id"],
+                "usuario"   => $user["usuario"],
+                "nombres"   => $user["nombres"],
+                "apellidos" => $user["apellidos"],
+                "rol"       => $user["rol"]
+            ];
+
+            $_SESSION["zona_activa"] = [
+                "id" => $zonas[0]["id"],
+                "nombre" => $zonas[0]["nombre"]
+            ];
+
+            header("Location: index.php?url=dashboard");
+            exit;
+        }
+
+        // ==============================
+        // MÁS de una zona → mostrar selector
+        // ==============================
+        $_SESSION["tmp_user"] = [
             "id"        => $user["id"],
             "usuario"   => $user["usuario"],
             "nombres"   => $user["nombres"],
             "apellidos" => $user["apellidos"],
-            "rol"       => $user["rol"],
-            "id_zona"   => $user["id_zona"]
+            "rol"       => $user["rol"]
         ];
 
-        header("Location: index.php?url=dashboard");
-        exit;
-    }
+        $_SESSION["tmp_zonas"] = $zonas;
 
+        $mostrarZonas = true;
+        $usuario = $user["usuario"];
+        require __DIR__ . "/../views/auth/login.php";
+    }
 
     /* ======================================
        Cerrar sesión

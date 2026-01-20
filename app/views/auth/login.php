@@ -226,17 +226,22 @@ body.bg-light {
 
 <!-- CARD LOGIN -->
 <div class="login-card">
-<div class="siscomite-anim-wrapper">
-    <div class="siscomite-anim">
-        <span>S</span><span>I</span><span>S</span>
-        <span>C</span><span>O</span><span>M</span><span>I</span><span>T</span><span>É</span>
+    <div class="siscomite-anim-wrapper">
+        <div class="siscomite-anim">
+            <span>S</span><span>I</span><span>S</span>
+            <span>C</span><span>O</span><span>M</span><span>I</span><span>T</span><span>É</span>
+        </div>
     </div>
-</div>
-
 
     <h4 class="login-title">Iniciar Sesión</h4>
 
     <form id="loginForm" action="index.php?url=login/entrar" method="POST" novalidate>
+
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger py-2">
+                <?= htmlspecialchars($error) ?>
+            </div>
+        <?php endif; ?>
 
         <!-- USUARIO -->
         <div class="mb-3">
@@ -250,39 +255,73 @@ body.bg-light {
                 required 
                 autocomplete="off"
                 pattern="[A-Za-z0-9._-]{4,50}"
+                value="<?= htmlspecialchars($usuario ?? '') ?>"
+                <?= (!empty($mostrarZonas) ? 'readonly' : '') ?>
             >
         </div>
 
-        <!-- CONTRASEÑA -->
-        <div class="mb-3">
-            <label class="form-label">Contraseña</label>
+        <?php if (empty($mostrarZonas)): ?>
+            <!-- CONTRASEÑA (solo Paso 1) -->
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
 
-            <div class="input-group">
-                <input
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    required
-                    autocomplete="new-password"
-                    id="passwordField"
-                >
-
-                <span class="input-group-text bg-white">
-                    <button
-                        type="button"
-                        class="btn btn-sm p-0 border-0"
-                        id="togglePassword"
-                        tabindex="-1"
+                <div class="input-group">
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        required
+                        autocomplete="new-password"
+                        id="passwordField"
                     >
-                        <i class="bi bi-eye" id="iconPass"></i>
-                    </button>
-                </span>
-            </div>
-        </div>
 
+                    <span class="input-group-text bg-white">
+                        <button
+                            type="button"
+                            class="btn btn-sm p-0 border-0"
+                            id="togglePassword"
+                            tabindex="-1"
+                        >
+                            <i class="bi bi-eye" id="iconPass"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        <?php else: ?>
+            <!-- PASO 2: Mensaje elegante (en vez de contraseña vacía) -->
+            <div class="mb-3">
+                <div class="alert alert-success py-2 mb-0 d-flex align-items-center gap-2">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <div>
+                        <div class="fw-semibold">Usuario autenticado</div>
+                        <div class="small">
+                            <?= htmlspecialchars($usuario ?? '') ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($mostrarZonas) && !empty($zonas) && count($zonas) > 1): ?>
+            <!-- PASO 2: ZONA -->
+            <div class="mb-3">
+                <label class="form-label">Seleccionar Zona</label>
+                <select name="zona_id" class="form-control" required>
+                    <option value="">-- Seleccione Zona--</option>
+                    <?php foreach ($zonas as $z): ?>
+                        <option value="<?= (int)$z['id'] ?>">
+                            <?= htmlspecialchars($z['nombre']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <small class="text-muted">Elige la zona con la que deseas ingresar.</small>
+            </div>
+
+            <input type="hidden" name="step" value="zona">
+        <?php endif; ?>
 
         <button class="btn btn-primary w-100" type="submit">
-            Ingresar
+            <?= (!empty($mostrarZonas) ? 'Continuar' : 'Ingresar') ?>
         </button>
 
     </form>
@@ -295,22 +334,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggleBtn = document.getElementById("togglePassword");
     const icon = document.getElementById("iconPass");
 
-    toggleBtn.addEventListener("click", () => {
-        if (passField.type === "password") {
-            passField.type = "text";
-            icon.classList.remove("bi-eye");
-            icon.classList.add("bi-eye-slash");
-        } else {
-            passField.type = "password";
-            icon.classList.remove("bi-eye-slash");
-            icon.classList.add("bi-eye");
-        }
-    });
+    // Solo activar si existe el campo (Paso 1)
+    if (passField && toggleBtn && icon) {
+        toggleBtn.addEventListener("click", () => {
+            if (passField.type === "password") {
+                passField.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            } else {
+                passField.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            }
+        });
+    }
 });
 </script>
 
-
 </body>
+
 </html>
 
 <?php require __DIR__ . "/../layout/footer.php"; ?>
