@@ -17,7 +17,7 @@ class JefesAgenciaController
     public function index()
     {
         // Zona asignada al usuario logueado
-        $idZona = $_SESSION["user"]["id_zona"] ?? null;
+        $idZona = $_SESSION["zona_Activa"]["id"] ?? null;
 
         if (!$idZona) {
             exit("Error: el usuario no tiene zona asignada.");

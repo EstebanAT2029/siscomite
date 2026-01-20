@@ -25,7 +25,7 @@ class ComiteApiController
         header("Content-Type: application/json");
 
         // Obtener zona asignada al usuario logueado
-        $idZona = $_SESSION["user"]["id_zona"] ?? null;
+        $idZona = $_SESSION["zona_activa"]["id"] ?? null;
 
         if (!$idZona) {
             echo json_encode([]);

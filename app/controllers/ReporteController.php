@@ -20,16 +20,42 @@ class ReporteController
         requireLogin();
 
         // 🔐 Zona del usuario logueado
-        $idZona = $_SESSION["user"]["id_zona"];
+        $idZona = $_SESSION["zona_activa"]["id"];
 
         // Solo agencias de su zona
-        $agencias   = $this->model->agencias($idZona);
+        $agencias = $this->model->agencias($idZona);
+
+        // ==========================
+        // PAGINACIÓN
+        // ==========================
+        $page  = max(1, (int)($_GET["page"] ?? 1));
+        $limit = 10; // cambia a 15/20 si deseas
+        $offset = ($page - 1) * $limit;
+
         $resultados = [];
+        $total = 0;
+        $totalPages = 1;
 
         if (!empty($_GET["agencia"])) {
-            $resultados = $this->model->reportePorAgencia(
-                $_GET["agencia"],
-                $idZona
+
+            $idAgencia = (int)$_GET["agencia"];
+
+            // Total para paginar
+            $total = $this->model->countReportePorAgencia($idAgencia, $idZona);
+            $totalPages = max(1, (int)ceil($total / $limit));
+
+            // Ajuste si alguien pone page muy alto
+            if ($page > $totalPages) {
+                $page = $totalPages;
+                $offset = ($page - 1) * $limit;
+            }
+
+            // Resultados paginados
+            $resultados = $this->model->reportePorAgenciaPaginado(
+                $idAgencia,
+                $idZona,
+                $limit,
+                $offset
             );
         }
 
@@ -44,7 +70,7 @@ class ReporteController
         requireLogin();
 
         // 🔐 Zona del usuario
-        $idZona = $_SESSION["user"]["id_zona"];
+        $idZona = $_SESSION["zona_activa"]["id"];
 
         $data = $this->model->reporteGeneral($idZona);
 

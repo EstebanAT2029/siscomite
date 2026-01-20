@@ -17,7 +17,7 @@ class OficialesNegociosController
     public function index()
     {
         // 🔥 Zona asignada al usuario logueado
-        $idZona = $_SESSION["user"]["id_zona"] ?? null;
+        $idZona = $_SESSION["zona_activa"]["id"] ?? null;
 
         if (!$idZona) {
             exit("Error: El usuario no tiene zona asignada.");

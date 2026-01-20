@@ -130,4 +130,77 @@ class ReporteModel
 
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
+        /**
+     * CONTAR REGISTROS PARA PAGINACIÓN
+     * (MISMO FILTRO QUE reportePorAgencia)
+     */
+    public function countReportePorAgencia($idAgencia, $idZona)
+    {
+        $sql = "
+            SELECT COUNT(*) AS total
+            FROM detalle_comite d
+            INNER JOIN agencia a ON a.id = d.id_agencia
+            WHERE d.id_agencia = ?
+              AND a.id_zona = ?
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("ii", $idAgencia, $idZona);
+        $stmt->execute();
+
+        $row = $stmt->get_result()->fetch_assoc();
+        return (int)$row["total"];
+    }
+
+    /**
+     * REPORTE POR AGENCIA PAGINADO
+     * (MISMO SQL QUE reportePorAgencia + LIMIT / OFFSET)
+     */
+    public function reportePorAgenciaPaginado($idAgencia, $idZona, $limit, $offset)
+    {
+        $sql = "
+            SELECT 
+                d.id AS id_detalle,
+                d.cadena,
+                a.nombre_agencia,
+                d.dni,
+                d.nombres AS cliente,
+                d.monto,
+                c.fecha,
+
+                CASE d.id_decision
+                    WHEN 1 THEN 'Aprobado'
+                    WHEN 2 THEN 'Observado'
+                    WHEN 3 THEN 'Denegado'
+                    ELSE 'Sin decisión'
+                END AS resolucion,
+
+                d.observaciones,
+
+                CONCAT(u.apellidos, ' ', u.nombres) AS usuario_registro,
+
+                c.id AS id_comite,
+                d.correlativo,
+
+                CONCAT(op.apellidos, ' ', op.nombres) AS oficial_proponente
+
+            FROM detalle_comite d
+            INNER JOIN comite c ON c.id = d.id_comite
+            INNER JOIN agencia a ON a.id = d.id_agencia
+            INNER JOIN usuarios u ON u.id = c.id_usuario
+            LEFT JOIN oficiales_negocios op ON op.id = d.id_oficial_proponente
+
+            WHERE d.id_agencia = ?
+              AND a.id_zona = ?
+
+            ORDER BY c.fecha DESC, d.cadena ASC
+            LIMIT ? OFFSET ?
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("iiii", $idAgencia, $idZona, $limit, $offset);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
 }
