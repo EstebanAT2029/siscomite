@@ -154,7 +154,7 @@
             <div class="col-md-3">
                 <label class="form-label">Oficial Proponente</label>
                 <select class="form-select oficial_prop">
-                    <option value="">Seleccione</option>
+                    <option value="" selected disabled>Seleccione</option>
                 </select>
             </div>
             <div class="col-md-3">

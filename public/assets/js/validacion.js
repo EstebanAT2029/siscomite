@@ -30,7 +30,6 @@ document.addEventListener("input", function (e) {
         }
 
         el.value = valor;
-
         el.setSelectionRange(start, start);
 
         const numero = parseFloat(valor.replace(/,/g, ""));
@@ -54,21 +53,34 @@ document.addEventListener("input", function (e) {
 });
 
 /* ============================================================
-   ✅ VALIDACIÓN EN SELECT (change) — NUEVO PARA CRITERIO
+   VALIDACIÓN EN SELECT (change)
 ============================================================ */
 document.addEventListener("change", function (e) {
     const el = e.target;
 
-    if (el.classList.contains("criterio") || el.classList.contains("decision") || el.classList.contains("oficial_prop")) {
-        if (el.value.trim() !== "") el.classList.remove("is-invalid");
+    if (
+        el.classList.contains("criterio") ||
+        el.classList.contains("decision") ||
+        el.classList.contains("oficial_prop")
+    ) {
+        if (esValorSelectValido(el.value)) el.classList.remove("is-invalid");
     }
 });
 
+/* ============================================================
+   UTIL: value válido para selects
+============================================================ */
+function esValorSelectValido(val) {
+    const v = String(val ?? "").trim();
+    if (!v) return false;
+    const invalidos = ["seleccione", "0", "null", "undefined", "-"];
+    return !invalidos.includes(v.toLowerCase());
+}
 
 /* ============================================================
    VALIDACIÓN GLOBAL AL FINALIZAR
 ============================================================ */
-function validarCamposObligatorios() {
+function validarCamposObligatorios(silent = false) {
 
     let ok = true;
     let primerError = null;
@@ -76,66 +88,98 @@ function validarCamposObligatorios() {
     // Encabezado
     ["fecha", "hora", "agencia", "oficial1", "oficial2", "jefe_ag"].forEach(id => {
         let campo = document.getElementById(id);
+
+        if (!campo) {
+            ok = false;
+            return;
+        }
+
         campo.classList.remove("is-invalid");
-        if (!campo.value.trim()) {
+
+        if (!String(campo.value ?? "").trim()) {
             campo.classList.add("is-invalid");
             if (!primerError) primerError = campo;
             ok = false;
         }
     });
 
+    const casos = document.querySelectorAll(".caso-item");
+    if (casos.length === 0) {
+        alert("⚠ Debe añadir al menos un caso antes de finalizar.");
+        return false;
+    }
+
     // Casos
-    document.querySelectorAll(".caso-item").forEach(caso => {
+    casos.forEach(caso => {
 
-        let dni = caso.querySelector(".dni");
-        let cadena = caso.querySelector(".cadena");
-        let nombres = caso.querySelector(".nombres");
-        let comentarios = caso.querySelector(".comentarios");
-        let monto = caso.querySelector(".monto");
-        let tipo_cli = caso.querySelector(".tipo_cli");
-        let tipo_credito = caso.querySelector(".tipo_credito");
-        let oficial_prop = caso.querySelector(".oficial_prop");
+        const dni          = caso.querySelector(".dni");
+        const cadena       = caso.querySelector(".cadena");
+        const nombres      = caso.querySelector(".nombres");
+        const monto        = caso.querySelector(".monto");
+        const tipo_cli     = caso.querySelector(".tipo_cli");
+        const tipo_credito = caso.querySelector(".tipo_credito");
+        const oficial_prop = caso.querySelector(".oficial_prop");
+        const criterio     = caso.querySelector(".criterio");   // ✅ CRITERIO
+        const decision     = caso.querySelector(".decision");
 
-        // ✅ NUEVO
-        let criterio = caso.querySelector(".criterio");
+        // ✅ Grupo obligatorio (incluye criterio)
+        const obligatorios = [dni, cadena, nombres, monto, tipo_cli, tipo_credito, oficial_prop, criterio, decision];
 
-        let decision = caso.querySelector(".decision");
+        obligatorios.forEach(c => {
 
-        const lista = [
-            dni, cadena, nombres, monto, tipo_cli, tipo_credito,
-            oficial_prop, criterio, decision
-        ];
+            if (!c) { // si no existe el control, es error
+                ok = false;
+                return;
+            }
 
-        lista.forEach(c => {
             c.classList.remove("is-invalid");
-            if (!c.value.trim()) {
+
+            // Validación especial para selects
+            if (c.classList.contains("criterio") || c.classList.contains("oficial_prop") || c.classList.contains("decision")) {
+                if (!esValorSelectValido(c.value)) {
+                    c.classList.add("is-invalid");
+                    if (!primerError) primerError = c;
+                    ok = false;
+                }
+                return;
+            }
+
+            // Inputs normales
+            if (!String(c.value ?? "").trim()) {
                 c.classList.add("is-invalid");
                 if (!primerError) primerError = c;
                 ok = false;
             }
         });
 
-        if (dni.value.length !== 8) {
+        // DNI estricto
+        if (dni && dni.value.length !== 8) {
             dni.classList.add("is-invalid");
+            if (!primerError) primerError = dni;
             ok = false;
         }
 
-        // OJO: tu regla actual es <= 1 (la mantengo igual)
-        if (parseFloat((monto.value || "").replace(/,/g, "")) <= 1) {
-            monto.classList.add("is-invalid");
-            ok = false;
+        // Monto estricto
+        if (monto) {
+            const m = parseFloat(String(monto.value ?? "").replace(/,/g, ""));
+            if (isNaN(m) || m <= 0) {
+                monto.classList.add("is-invalid");
+                if (!primerError) primerError = monto;
+                ok = false;
+            }
         }
 
     });
 
     if (!ok) {
-        alert("⚠ POR FAVOR COMPLETE CORRECTAMENTE TODOS LOS CAMPOS ANTES DE FINALIZAR.");
+        if (!silent) {
+            alert("⚠ POR FAVOR COMPLETE CORRECTAMENTE TODOS LOS CAMPOS ANTES DE FINALIZAR.");
+        }
         primerError?.focus();
     }
 
     return ok;
 }
-
 
 /* ============================================================
    VALIDACIÓN DE OBSERVACIONES + CONFIRMACIÓN
@@ -148,16 +192,18 @@ function validarObservacionesYConfirmar() {
     if (!hay) {
         let continuar = confirm("⚠ No ingresó comentarios. ¿Desea continuar sin observaciones?");
         if (!continuar) {
-            comentarios[0].classList.add("is-invalid");
-            comentarios[0].focus();
+            comentarios[0]?.classList.add("is-invalid");
+            comentarios[0]?.focus();
             return;
         }
     }
 
-    // TODO OK → REGISTRAR COMITÉ
+    // ✅ Si falta algo -> NO abrir modal
+    if (!validarCamposObligatorios()) return;
+
+    // TODO OK → mostrar resumen / finalizar
     window.finalizarComite();
 }
-
 
 /* ============================================================
    BOTÓN FINALIZAR — ES LA PUERTA DE CONTROL
@@ -165,11 +211,13 @@ function validarObservacionesYConfirmar() {
 document.addEventListener("DOMContentLoaded", () => {
 
     const btnFinalizar = document.getElementById("btnFinalizar");
+    if (!btnFinalizar) return;
 
     btnFinalizar.addEventListener("click", (e) => {
 
         e.preventDefault();
 
+        // ✅ Si falta algo -> NO abrir modal
         if (!validarCamposObligatorios()) return;
 
         validarObservacionesYConfirmar();

@@ -12,6 +12,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const selOf2       = document.getElementById("oficial2");
     const selJefe      = document.getElementById("jefe_ag");
 
+    // ============================================================
+    // 🔒 BLOQUEO DEFINITIVO: el modal resumen NO puede abrirse si falta algo
+    // (aunque otro script lo intente abrir)
+    // ============================================================
+    const modalResumenEl = document.getElementById("modalResumenComite");
+
+    if (modalResumenEl) {
+        modalResumenEl.addEventListener("show.bs.modal", function (e) {
+
+            // Si NO existe la función o NO pasa la validación -> NO ABRIR
+            if (typeof validarCamposObligatorios !== "function" || !validarCamposObligatorios(true)) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+
+                // Por seguridad: limpiar cualquier backdrop colgado
+                setTimeout(() => {
+                    document.querySelectorAll(".modal-backdrop").forEach(b => b.remove());
+                    document.body.classList.remove("modal-open");
+                    document.body.style.removeProperty("padding-right");
+                }, 50);
+
+                return false;
+            }
+        });
+    }
+
+
+
+
     const btnEmpezar = document.getElementById("btnEmpezar");
     if (btnEmpezar) {
         btnEmpezar.addEventListener("click", () => {
@@ -293,7 +322,12 @@ document.addEventListener("DOMContentLoaded", () => {
        ✅ Ahora: SOLO si valida todo → muestra modal resumen
     ============================================================= */
     window.finalizarComite = function () {
-        // 🔥 OJO: aquí ya viene TODO validado desde validacion.js
+
+        // 🔒 VALIDACIÓN DEFINITIVA (la fuerte)
+        // Si falta algo -> NO mostrar modal resumen
+        if (!validarTodoAntesDeResumen()) return;
+
+        // ✅ Recién aquí armamos el resumen
         const ok = construirResumenAntesDeFinalizar();
         if (!ok) return;
 
@@ -303,9 +337,10 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // 🔒 No cerrar fuera ni con ESC (forzado)
         const modal = new bootstrap.Modal(modalEl, { backdrop: "static", keyboard: false });
         modal.show();
+        console.trace("FINALIZAR COMITE LLAMADO DESDE:");
+
     };
 
 
@@ -313,30 +348,38 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btnContinuarFinalizacion")?.addEventListener("click", () => {
         enviarComite();
     });
-    // ✅ Botón Regresar: cierra modal correctamente y libera la pantalla
+    // ============================================================
+    // 🔙 BOTÓN REGRESAR (FIX SCROLL DEFINITIVO)
+    // ============================================================
     document.getElementById("btnRegresarResumen")?.addEventListener("click", () => {
 
         const modalEl = document.getElementById("modalResumenComite");
         if (!modalEl) return;
 
-        // Cerrar con API Bootstrap (evita que quede el backdrop bloqueando)
-        const inst = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-        inst.hide();
+        const inst = bootstrap.Modal.getInstance(modalEl);
+        if (inst) inst.hide();
 
-        // 🔧 Por seguridad: remover backdrop si quedara colgado (caso raro)
+        // ✅ FIX DEFINITIVO: restaurar scroll
         setTimeout(() => {
+
+            // eliminar backdrops huérfanos
             document.querySelectorAll(".modal-backdrop").forEach(b => b.remove());
-            document.body.classList.remove("modal-open");
-            document.body.style.removeProperty("padding-right");
-        }, 300);
 
-        // ✅ Opcional: enfocar el primer campo del último caso
-        setTimeout(() => {
+            // restaurar body
+            document.body.classList.remove("modal-open");
+            document.body.style.removeProperty("overflow");
+            document.body.style.removeProperty("padding-right");
+
+            // restaurar html (algunos navegadores)
+            document.documentElement.style.removeProperty("overflow");
+
+            // foco para continuar trabajando
             const ultimoCaso = document.querySelector(".caso-item:last-child");
-            const foco = ultimoCaso?.querySelector(".dni") || document.getElementById("agencia");
-            foco?.focus();
+            (ultimoCaso?.querySelector(".dni") || document.getElementById("agencia"))?.focus();
+
         }, 350);
     });
+
 
 
     /* ============================================================
@@ -536,6 +579,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const mm = String(ahora.getMinutes()).padStart(2, "0");
 
         inputHora.value = `${hh}:${mm}`;
+    }
+    // ============================================================
+    // 🔒 RESTAURAR SCROLL SI EL MODAL SE CIERRA POR CUALQUIER MOTIVO
+    // ============================================================
+
+    if (modalResumenEl) {
+        modalResumenEl.addEventListener("hidden.bs.modal", () => {
+
+            document.querySelectorAll(".modal-backdrop").forEach(b => b.remove());
+
+            document.body.classList.remove("modal-open");
+            document.body.style.removeProperty("overflow");
+            document.body.style.removeProperty("padding-right");
+
+            document.documentElement.style.removeProperty("overflow");
+        });
     }
 
 });
