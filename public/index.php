@@ -138,6 +138,11 @@ if ($uri === "api/jefes") {
     requireLogin();
     return (new ComiteApiController())->jefes();
 }
+if ($uri === "api/criterios") {
+    requireLogin();
+    return (new ComiteApiController())->criterios();
+}
+
 
 /* ======================================
    REPORTES

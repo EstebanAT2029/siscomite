@@ -85,5 +85,13 @@ class ComiteApiController
 
         echo json_encode($oficiales);
     }
+    public function criterios()
+    {
+        requireLogin();
+        $m = new CriterioModel();
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode($m->listarActivos());
+    }
+
 
 }

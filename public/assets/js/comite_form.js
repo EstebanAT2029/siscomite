@@ -3,8 +3,7 @@
 ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Elementos principales
-        // ✅ Al cargar el formulario → hora del sistema
+    // ✅ Al cargar el formulario → hora del sistema
     actualizarHoraSistema(true);
 
     const selAgencia   = document.getElementById("agencia");
@@ -13,12 +12,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const selJefe      = document.getElementById("jefe_ag");
 
     const btnEmpezar = document.getElementById("btnEmpezar");
-        if (btnEmpezar) {
-            btnEmpezar.addEventListener("click", () => {
-                // 🔒 No forzar, solo asegurar que exista
-                actualizarHoraSistema(false);
-            });
-        }
+    if (btnEmpezar) {
+        btnEmpezar.addEventListener("click", () => {
+            actualizarHoraSistema(false);
+        });
+    }
+
     const btnAñadir    = document.getElementById("btnAñadir");
     const btnFinalizar = document.getElementById("btnFinalizar");
 
@@ -32,7 +31,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let oficialesGlobal = [];
     let jefesGlobal     = [];
+    let criteriosGlobal = []; // ✅ NUEVO
     let numCaso = 0;
+
+    /* ============================================================
+       0. Cargar criterios (para combos por caso)
+    ============================================================= */
+    fetch("index.php?url=api/criterios")
+        .then(res => res.json())
+        .then(data => {
+            criteriosGlobal = data || [];
+        })
+        .catch(err => {
+            console.error("Error cargando criterios:", err);
+            criteriosGlobal = [];
+        });
 
     /* ============================================================
        1. Cargar agencias según zona del usuario
@@ -97,6 +110,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function limpiarCombo(select) {
         select.innerHTML = `<option value="">Seleccione</option>`;
+    }
+
+    // ✅ NUEVO: llenar combo criterios (value=id, texto=codigo)
+    function llenarComboCriterios(select) {
+        if (!select) return;
+        select.innerHTML = `<option value="">Seleccione</option>`;
+        (criteriosGlobal || []).forEach(c => {
+            select.innerHTML += `<option value="${c.id}">${c.codigo}</option>`;
+        });
     }
 
     /* ============================================================
@@ -170,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* ============================================================
-    4. Añadir caso
+       4. Añadir caso
     ============================================================ */
     btnAñadir.addEventListener("click", () => {
 
@@ -181,22 +203,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
         divCaso.querySelector(".titulo-caso").textContent = `Caso ${numCaso}`;
 
+        // ✅ NUEVO: llenar criterios en este caso
+        const selCriterio = divCaso.querySelector(".criterio");
+        llenarComboCriterios(selCriterio);
+
         contCasos.appendChild(clone);
 
-        // 🔥 MUY IMPORTANTE:
-        // recalcula los oficiales proponentes según
-        // la cantidad total de casos existentes
+        // recalcula oficiales proponentes
         actualizarComboProponentes();
     });
 
-
     /* ============================================================
        5. Finalizar Comité — LLAMADO DESDE validacion.js
+       ✅ Ahora: muestra modal resumen y luego envía al confirmar
     ============================================================= */
     window.finalizarComite = function () {
+        // armar resumen y mostrar modal
+        const ok = construirResumenAntesDeFinalizar();
+        if (!ok) return;
+
+        const modalEl = document.getElementById("modalResumenComite");
+        if (!modalEl) {
+            // si no existe modal, por compatibilidad envía directo
+            enviarComite();
+            return;
+        }
+
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    };
+
+    // botón continuar dentro del modal
+    document.getElementById("btnContinuarFinalizacion")?.addEventListener("click", () => {
+        enviarComite();
+    });
+
+    /* ============================================================
+       Enviar comité (antes estaba dentro de finalizarComite)
+    ============================================================= */
+    function enviarComite() {
 
         const payload = armarJSON();
-
         console.log("➡ Enviando JSON:", payload);
 
         fetch("index.php?url=comite/store", {
@@ -218,6 +265,13 @@ document.addEventListener("DOMContentLoaded", () => {
             window.ID_COMITE  = resp.id_comite;
             window.ID_DETALLE = resp.id_detalle;
 
+            // cerrar modal resumen si está abierto
+            const modalEl = document.getElementById("modalResumenComite");
+            if (modalEl) {
+                const inst = bootstrap.Modal.getInstance(modalEl);
+                if (inst) inst.hide();
+            }
+
             const modal = new bootstrap.Modal(document.getElementById("modalTipoComite"));
             modal.show();
         })
@@ -225,10 +279,11 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error conectando:", err);
             customAlert("❌ Error de conexión.");
         });
-    };
+    }
 
     /* ============================================================
        Construye JSON
+       ✅ Agrega id_criterio por caso
     ============================================================= */
     function armarJSON() {
 
@@ -249,6 +304,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 tipo_cli:     caso.querySelector(".tipo_cli").value,
                 tipo_credito: caso.querySelector(".tipo_credito").value,
                 oficial_prop: caso.querySelector(".oficial_prop").value,
+
+                // ✅ NUEVO
+                id_criterio:  caso.querySelector(".criterio")?.value || "",
+
                 decision:     caso.querySelector(".decision").value,
                 comentarios:  caso.querySelector(".comentarios").value,
                 vinculados:   vinculados
@@ -265,11 +324,103 @@ document.addEventListener("DOMContentLoaded", () => {
             casos:        casos
         };
     }
+
+    /* ============================================================
+       ✅ Resumen modal (similar a tu 2da imagen)
+    ============================================================= */
+    function construirResumenAntesDeFinalizar() {
+
+        const tbody = document.getElementById("resumenBody");
+        const alertBox = document.getElementById("resumenErrores");
+        const btnContinuar = document.getElementById("btnContinuarFinalizacion");
+
+        // si no existe modal, no bloqueamos
+        if (!tbody) return true;
+
+        tbody.innerHTML = "";
+        alertBox?.classList.add("d-none");
+        if (btnContinuar) btnContinuar.disabled = false;
+
+        const casos = document.querySelectorAll(".caso-item");
+        if (casos.length === 0) {
+            customAlert("⚠ Debe añadir al menos un caso.", "Validación");
+            return false;
+        }
+
+        let hayErrores = false;
+
+        casos.forEach((caso, idx) => {
+            const dni = (caso.querySelector(".dni")?.value || "").trim();
+            const cliente = (caso.querySelector(".nombres")?.value || "").trim();
+            const monto = (caso.querySelector(".monto")?.value || "").trim();
+            const tipoCli = (caso.querySelector(".tipo_cli")?.value || "").trim();
+
+            const selCrit = caso.querySelector(".criterio");
+            const idCrit = selCrit?.value || "";
+            const critTxt = selCrit?.selectedOptions?.[0]?.textContent?.trim() || "";
+
+            const selDec = caso.querySelector(".decision");
+            const decTxt = (selDec?.value || "").trim();
+
+            if (!idCrit || !decTxt) hayErrores = true;
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td><b>${idx + 1}</b></td>
+              <td>${dni || '<span class="text-muted">—</span>'}</td>
+              <td>${cliente || '<span class="text-muted">—</span>'}</td>
+              <td class="text-end">${fmtMonto(monto)}</td>
+              <td>${tipoCli || '<span class="text-muted">—</span>'}</td>
+              <td>${badgeCriterio(critTxt || '-')}</td>
+              <td>${badgeDecision(decTxt || '-')}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        if (hayErrores) {
+            alertBox?.classList.remove("d-none");
+            if (btnContinuar) btnContinuar.disabled = true;
+        }
+
+        return !hayErrores;
+    }
+
+    function badgeCriterio(text) {
+        return `<span class="badge bg-primary">${escapeHtml(text)}</span>`;
+    }
+
+    function badgeDecision(text) {
+        const t = (text || "").toLowerCase();
+        let cls = "bg-secondary";
+        if (t === "aprobado") cls = "bg-success";
+        if (t === "observado") cls = "bg-warning text-dark";
+        if (t === "denegado") cls = "bg-danger";
+        return `<span class="badge ${cls}">${escapeHtml(text)}</span>`;
+    }
+
+    function fmtMonto(val) {
+        const n = parseFloat((val || "").toString().replace(/,/g, ""));
+        if (isNaN(n)) return "-";
+        return n.toLocaleString("es-PE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function escapeHtml(str) {
+        return (str || "").replace(/[&<>"']/g, (m) => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        }[m]));
+    }
+
+    /* ============================================================
+       Hora sistema
+    ============================================================= */
     function actualizarHoraSistema(force = false) {
         const inputHora = document.getElementById("hora");
         if (!inputHora) return;
 
-        // ❗ Solo setear si está vacío o si se fuerza
         if (inputHora.value && !force) return;
 
         const ahora = new Date();

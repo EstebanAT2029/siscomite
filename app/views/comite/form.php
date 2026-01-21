@@ -157,6 +157,13 @@
                     <option value="">Seleccione</option>
                 </select>
             </div>
+            <div class="col-md-3">
+                <label class="form-label"><b>Criterio</b></label>
+                <select class="form-select criterio" required>
+                    <option value="">Seleccione</option>
+                    <!-- Se llenará por JS: C1..C9 (value=id_criterio, texto=codigo) -->
+                </select>
+            </div>
 
             <div class="col-md-3">
                 <label class="form-label">Decisión</label>
@@ -393,6 +400,56 @@
         </div>
     </div>
 </div>
+<!-- =============================================================== -->
+<!--  MODAL RESUMEN ANTES DE FINALIZAR                               -->
+<!-- =============================================================== -->
+<div class="modal fade" id="modalResumenComite" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-header bg-dark text-white">
+              <h5 class="modal-title">¿Desea continuar con la finalización?</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+
+          <div class="modal-body">
+              <div class="small text-muted mb-2">
+                  Verifique los casos. <b class="text-primary">Criterio</b> y <b class="text-success">Decisión</b> están resaltados.
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:80px;">Caso</th>
+                            <th>DNI</th>
+                            <th>Cliente</th>
+                            <th class="text-end">Monto</th>
+                            <th>Tipo Cli</th>
+                            <th>Criterio</th>
+                            <th>Decisión</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resumenBody"></tbody>
+                </table>
+              </div>
+
+              <div id="resumenErrores" class="alert alert-warning d-none mb-0">
+                  Hay casos incompletos (faltan <b>criterio</b> o <b>decisión</b>). Corrija antes de continuar.
+              </div>
+          </div>
+
+          <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                  Regresar
+              </button>
+              <button type="button" class="btn btn-primary" id="btnContinuarFinalizacion">
+                  Continuar
+              </button>
+          </div>
+      </div>
+  </div>
+</div>
+
 
 <!-- ============================= -->
 <!-- SCRIPTS DEL FORMULARIO        -->
@@ -403,5 +460,93 @@
 <script src="assets/js/comite_riesgo_validacion.js?v=<?php echo time(); ?>"></script>
 <script src="assets/js/comite_modalidad.js?v=<?php echo time(); ?>"></script>
 <script src="assets/js/comite_riesgo.js?v=<?php echo time(); ?>"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btnFinalizar = document.getElementById("btnFinalizar");
+  const resumenBody = document.getElementById("resumenBody");
+  const resumenErrores = document.getElementById("resumenErrores");
+  const btnContinuar = document.getElementById("btnContinuarFinalizacion");
+
+  function badgeCriterio(text) {
+    return `<span class="badge bg-primary">${text || '-'}</span>`;
+  }
+
+  function badgeDecision(text) {
+    const t = (text || '').toLowerCase();
+    let cls = 'bg-secondary';
+    if (t === 'aprobado') cls = 'bg-success';
+    if (t === 'observado') cls = 'bg-warning text-dark';
+    if (t === 'denegado') cls = 'bg-danger';
+    return `<span class="badge ${cls}">${text || '-'}</span>`;
+  }
+
+  function fmtMonto(val) {
+    const n = parseFloat((val || '').toString().replace(/,/g,''));
+    if (isNaN(n)) return '-';
+    return n.toLocaleString('es-PE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  }
+
+  function construirResumen() {
+    resumenBody.innerHTML = '';
+    resumenErrores.classList.add('d-none');
+    btnContinuar.disabled = false;
+
+    const casos = document.querySelectorAll("#contenedor-casos .caso-item");
+    let hayErrores = false;
+
+    casos.forEach((caso, idx) => {
+      const dni = caso.querySelector(".dni")?.value?.trim() || '';
+      const cliente = caso.querySelector(".nombres")?.value?.trim() || '';
+      const monto = caso.querySelector(".monto")?.value?.trim() || '';
+      const tipoCli = caso.querySelector(".tipo_cli")?.value?.trim() || '';
+
+      const selCriterio = caso.querySelector(".criterio");
+      const criterioId = selCriterio?.value || '';
+      const criterioTxt = selCriterio?.selectedOptions?.[0]?.textContent?.trim() || '';
+
+      const selDecision = caso.querySelector(".decision");
+      const decisionTxt = selDecision?.value?.trim() || '';
+
+      // Validación mínima (criterio obligatorio + decisión obligatoria)
+      if (!criterioId || !decisionTxt) hayErrores = true;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><b>${idx + 1}</b></td>
+        <td>${dni ? dni : '<span class="text-muted">—</span>'}</td>
+        <td>${cliente ? cliente : '<span class="text-muted">—</span>'}</td>
+        <td class="text-end">${fmtMonto(monto)}</td>
+        <td>${tipoCli ? tipoCli : '<span class="text-muted">—</span>'}</td>
+        <td>${badgeCriterio(criterioTxt)}</td>
+        <td>${badgeDecision(decisionTxt)}</td>
+      `;
+      resumenBody.appendChild(tr);
+    });
+
+    if (hayErrores) {
+      resumenErrores.classList.remove('d-none');
+      btnContinuar.disabled = true;
+    }
+  }
+
+  // Mostrar modal resumen en vez de finalizar directo
+  btnFinalizar?.addEventListener("click", (e) => {
+    e.preventDefault();
+    construirResumen();
+
+    const modal = new bootstrap.Modal(document.getElementById('modalResumenComite'));
+    modal.show();
+  });
+
+  // Aquí conectaremos a tu lógica real de finalizar (cuando me pases comite_form.js)
+  btnContinuar?.addEventListener("click", () => {
+    // Por ahora: solo cierra modal.
+    // En el siguiente paso: llamaremos a tu función real de finalización.
+    const modalEl = document.getElementById('modalResumenComite');
+    const instance = bootstrap.Modal.getInstance(modalEl);
+    if (instance) instance.hide();
+  });
+});
+</script>
 
 <?php require __DIR__ . '/../layout/footer.php'; ?>
