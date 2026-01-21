@@ -20,13 +20,10 @@ document.addEventListener("input", function (e) {
     // MONTO
     if (el.classList.contains("monto")) {
 
-        // Guardar posición del cursor
         const start = el.selectionStart;
 
-        // Permitir números, coma y punto
         let valor = el.value.replace(/[^0-9.,]/g, "");
 
-        // Evitar más de un punto decimal
         const partes = valor.split(".");
         if (partes.length > 2) {
             valor = partes.shift() + "." + partes.join("");
@@ -34,22 +31,19 @@ document.addEventListener("input", function (e) {
 
         el.value = valor;
 
-        // Restaurar cursor
         el.setSelectionRange(start, start);
 
-        // Validación numérica REAL (quitando comas)
         const numero = parseFloat(valor.replace(/,/g, ""));
         if (!isNaN(numero) && numero > 0) {
             el.classList.remove("is-invalid");
         }
     }
 
-
     // TEXTOS MAYÚSCULA
     if (
         el.classList.contains("nombres") ||
         el.classList.contains("tipo_cli") ||
-        el.classList.contains("tipo_credito") 
+        el.classList.contains("tipo_credito")
     ) {
         let p = el.selectionStart;
         el.value = el.value.toUpperCase();
@@ -57,6 +51,17 @@ document.addEventListener("input", function (e) {
         if (el.value.trim() !== "") el.classList.remove("is-invalid");
     }
 
+});
+
+/* ============================================================
+   ✅ VALIDACIÓN EN SELECT (change) — NUEVO PARA CRITERIO
+============================================================ */
+document.addEventListener("change", function (e) {
+    const el = e.target;
+
+    if (el.classList.contains("criterio") || el.classList.contains("decision") || el.classList.contains("oficial_prop")) {
+        if (el.value.trim() !== "") el.classList.remove("is-invalid");
+    }
 });
 
 
@@ -90,9 +95,16 @@ function validarCamposObligatorios() {
         let tipo_cli = caso.querySelector(".tipo_cli");
         let tipo_credito = caso.querySelector(".tipo_credito");
         let oficial_prop = caso.querySelector(".oficial_prop");
+
+        // ✅ NUEVO
+        let criterio = caso.querySelector(".criterio");
+
         let decision = caso.querySelector(".decision");
 
-        const lista = [dni, cadena, nombres, monto, tipo_cli, tipo_credito, oficial_prop, decision];
+        const lista = [
+            dni, cadena, nombres, monto, tipo_cli, tipo_credito,
+            oficial_prop, criterio, decision
+        ];
 
         lista.forEach(c => {
             c.classList.remove("is-invalid");
@@ -108,7 +120,8 @@ function validarCamposObligatorios() {
             ok = false;
         }
 
-        if (parseFloat(monto.value) <= 1) {
+        // OJO: tu regla actual es <= 1 (la mantengo igual)
+        if (parseFloat((monto.value || "").replace(/,/g, "")) <= 1) {
             monto.classList.add("is-invalid");
             ok = false;
         }
@@ -155,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     btnFinalizar.addEventListener("click", (e) => {
 
-        e.preventDefault();   // ← BLOQUEA comite_form.js
+        e.preventDefault();
 
         if (!validarCamposObligatorios()) return;
 

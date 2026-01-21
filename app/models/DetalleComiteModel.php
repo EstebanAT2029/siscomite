@@ -28,9 +28,10 @@ class DetalleComiteModel
             id_oficial_participante1,
             id_oficial_participante2,
             id_jefe_agencia,
+            id_criterio,
             id_decision,
             observaciones
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $this->db->prepare($sql);
 
@@ -39,7 +40,7 @@ class DetalleComiteModel
         }
 
         $stmt->bind_param(
-            "iiisssdsssiiiis",
+            "iissssdsisiiiiis",
             $data["id_comite"],
             $data["id_agencia"],
             $data["correlativo"],
@@ -53,6 +54,7 @@ class DetalleComiteModel
             $data["id_of1"],
             $data["id_of2"],
             $data["id_jefe_agencia"],
+            $data["id_criterio"],
             $data["id_decision"],
             $data["observaciones"]
         );
@@ -88,6 +90,7 @@ class DetalleComiteModel
 
         return $stmt->get_result()->fetch_assoc();
     }
+
     /* ============================================================
        OBTENER CORRELATIVO POR AGENCIA + AÑO
        (Usa fecha del comité, no fecha inexistente)
@@ -108,7 +111,6 @@ class DetalleComiteModel
         return intval($res["ultimo"]) + 1;
     }
 
-
     /* ============================================================
        VALIDAR ZONA DE AGENCIA
        (Para restringir registros por usuario)
@@ -125,6 +127,7 @@ class DetalleComiteModel
 
         return $res["id_zona"] ?? null;
     }
+
     public function getByComite($idComite)
     {
         $sql = "SELECT d.*, 

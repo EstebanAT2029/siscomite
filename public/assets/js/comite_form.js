@@ -3,6 +3,7 @@
 ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Elementos principales
     // ✅ Al cargar el formulario → hora del sistema
     actualizarHoraSistema(true);
 
@@ -14,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnEmpezar = document.getElementById("btnEmpezar");
     if (btnEmpezar) {
         btnEmpezar.addEventListener("click", () => {
+            // 🔒 No forzar, solo asegurar que exista
             actualizarHoraSistema(false);
         });
     }
@@ -203,40 +205,139 @@ document.addEventListener("DOMContentLoaded", () => {
 
         divCaso.querySelector(".titulo-caso").textContent = `Caso ${numCaso}`;
 
-        // ✅ NUEVO: llenar criterios en este caso
+        // ✅ NUEVO: llenar criterios en este caso (antes de decisión)
         const selCriterio = divCaso.querySelector(".criterio");
         llenarComboCriterios(selCriterio);
 
         contCasos.appendChild(clone);
 
-        // recalcula oficiales proponentes
+        // 🔥 MUY IMPORTANTE:
+        // recalcula los oficiales proponentes según
+        // la cantidad total de casos existentes
         actualizarComboProponentes();
     });
 
     /* ============================================================
+       🔒 VALIDACIÓN FUERTE: si algo falta, NO mostrar modal resumen
+       (esto se ejecuta ANTES del resumen)
+    ============================================================= */
+    function validarTodoAntesDeResumen() {
+
+        // Encabezado
+        if (!selAgencia.value || !selOf1.value || !selOf2.value || !selJefe.value) {
+            customAlert("⚠ Complete todos los campos del encabezado.", "Validación");
+            return false;
+        }
+
+        const casos = document.querySelectorAll(".caso-item");
+        if (casos.length === 0) {
+            customAlert("⚠ Debe añadir al menos un caso.", "Validación");
+            return false;
+        }
+
+        let hayError = false;
+
+        const marcar = (el) => {
+            if (!el) return;
+            el.classList.add("is-invalid");
+            hayError = true;
+        };
+        const limpiar = (el) => {
+            if (!el) return;
+            el.classList.remove("is-invalid");
+        };
+
+        casos.forEach((caso) => {
+
+            const dni       = caso.querySelector(".dni");
+            const cadena    = caso.querySelector(".cadena"); // opcional (no lo marco)
+            const nombres   = caso.querySelector(".nombres");
+            const monto     = caso.querySelector(".monto");
+            const tipoCli   = caso.querySelector(".tipo_cli");
+            const tipoCred  = caso.querySelector(".tipo_credito"); // opcional (no lo marco)
+            const ofProp    = caso.querySelector(".oficial_prop");
+            const criterio  = caso.querySelector(".criterio");
+            const decision  = caso.querySelector(".decision");
+
+            // limpiar marcas previas
+            [dni, nombres, monto, tipoCli, ofProp, criterio, decision].forEach(limpiar);
+
+            // obligatorios mínimos
+            if (!dni?.value?.trim()) marcar(dni);
+            if (!nombres?.value?.trim()) marcar(nombres);
+
+            // monto > 0
+            const m = parseFloat((monto?.value || "").toString().replace(/,/g, ""));
+            if (!monto?.value?.trim() || isNaN(m) || m <= 0) marcar(monto);
+
+            if (!tipoCli?.value?.trim()) marcar(tipoCli);
+            if (!ofProp?.value?.trim()) marcar(ofProp);
+
+            // ✅ criterio obligatorio
+            if (!criterio?.value?.trim()) marcar(criterio);
+
+            // decisión (siempre trae valor, pero por seguridad)
+            if (!decision?.value?.trim()) marcar(decision);
+        });
+
+        if (hayError) {
+            customAlert("⚠ Hay campos obligatorios pendientes en uno o más casos.", "Validación");
+            return false;
+        }
+
+        return true;
+    }
+
+    /* ============================================================
        5. Finalizar Comité — LLAMADO DESDE validacion.js
-       ✅ Ahora: muestra modal resumen y luego envía al confirmar
+       ✅ Ahora: SOLO si valida todo → muestra modal resumen
     ============================================================= */
     window.finalizarComite = function () {
-        // armar resumen y mostrar modal
+        // 🔥 OJO: aquí ya viene TODO validado desde validacion.js
         const ok = construirResumenAntesDeFinalizar();
         if (!ok) return;
 
         const modalEl = document.getElementById("modalResumenComite");
         if (!modalEl) {
-            // si no existe modal, por compatibilidad envía directo
             enviarComite();
             return;
         }
 
-        const modal = new bootstrap.Modal(modalEl);
+        // 🔒 No cerrar fuera ni con ESC (forzado)
+        const modal = new bootstrap.Modal(modalEl, { backdrop: "static", keyboard: false });
         modal.show();
     };
+
 
     // botón continuar dentro del modal
     document.getElementById("btnContinuarFinalizacion")?.addEventListener("click", () => {
         enviarComite();
     });
+    // ✅ Botón Regresar: cierra modal correctamente y libera la pantalla
+    document.getElementById("btnRegresarResumen")?.addEventListener("click", () => {
+
+        const modalEl = document.getElementById("modalResumenComite");
+        if (!modalEl) return;
+
+        // Cerrar con API Bootstrap (evita que quede el backdrop bloqueando)
+        const inst = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        inst.hide();
+
+        // 🔧 Por seguridad: remover backdrop si quedara colgado (caso raro)
+        setTimeout(() => {
+            document.querySelectorAll(".modal-backdrop").forEach(b => b.remove());
+            document.body.classList.remove("modal-open");
+            document.body.style.removeProperty("padding-right");
+        }, 300);
+
+        // ✅ Opcional: enfocar el primer campo del último caso
+        setTimeout(() => {
+            const ultimoCaso = document.querySelector(".caso-item:last-child");
+            const foco = ultimoCaso?.querySelector(".dni") || document.getElementById("agencia");
+            foco?.focus();
+        }, 350);
+    });
+
 
     /* ============================================================
        Enviar comité (antes estaba dentro de finalizarComite)
@@ -272,7 +373,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (inst) inst.hide();
             }
 
-            const modal = new bootstrap.Modal(document.getElementById("modalTipoComite"));
+            const modal = new bootstrap.Modal(
+                document.getElementById("modalTipoComite"),
+                { backdrop: "static", keyboard: false }
+            );
             modal.show();
         })
         .catch(err => {
@@ -299,7 +403,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 cadena:       caso.querySelector(".cadena").value,
                 nombres:      caso.querySelector(".nombres").value,
                 monto: parseFloat(
-                    caso.querySelector(".monto").value.replace(/,/g, "")
+                    (caso.querySelector(".monto").value || "").replace(/,/g, "")
                 ) || 0,
                 tipo_cli:     caso.querySelector(".tipo_cli").value,
                 tipo_credito: caso.querySelector(".tipo_credito").value,
@@ -327,6 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ============================================================
        ✅ Resumen modal (similar a tu 2da imagen)
+       Nota: aquí ya no decide si abrir modal; eso lo decide validarTodoAntesDeResumen()
     ============================================================= */
     function construirResumenAntesDeFinalizar() {
 
@@ -347,6 +452,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return false;
         }
 
+        // Como ya validamos antes, esto casi nunca se activa,
+        // pero lo dejamos por seguridad.
         let hayErrores = false;
 
         casos.forEach((caso, idx) => {
@@ -380,9 +487,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (hayErrores) {
             alertBox?.classList.remove("d-none");
             if (btnContinuar) btnContinuar.disabled = true;
+
+            // 🔒 si algo fallara, no permitimos seguir
+            return false;
         }
 
-        return !hayErrores;
+        return true;
     }
 
     function badgeCriterio(text) {
@@ -414,13 +524,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }[m]));
     }
 
-    /* ============================================================
-       Hora sistema
-    ============================================================= */
     function actualizarHoraSistema(force = false) {
         const inputHora = document.getElementById("hora");
         if (!inputHora) return;
 
+        // ❗ Solo setear si está vacío o si se fuerza
         if (inputHora.value && !force) return;
 
         const ahora = new Date();
@@ -431,6 +539,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
-
 
 

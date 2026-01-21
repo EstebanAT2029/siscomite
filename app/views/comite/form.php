@@ -403,52 +403,54 @@
 <!-- =============================================================== -->
 <!--  MODAL RESUMEN ANTES DE FINALIZAR                               -->
 <!-- =============================================================== -->
-<div class="modal fade" id="modalResumenComite" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-          <div class="modal-header bg-dark text-white">
-              <h5 class="modal-title">¿Desea continuar con la finalización?</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-          </div>
+<div class="modal fade" id="modalResumenComite"
+     tabindex="-1" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
 
-          <div class="modal-body">
-              <div class="small text-muted mb-2">
-                  Verifique los casos. <b class="text-primary">Criterio</b> y <b class="text-success">Decisión</b> están resaltados.
-              </div>
-
-              <div class="table-responsive">
-                <table class="table table-bordered align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th style="width:80px;">Caso</th>
-                            <th>DNI</th>
-                            <th>Cliente</th>
-                            <th class="text-end">Monto</th>
-                            <th>Tipo Cli</th>
-                            <th>Criterio</th>
-                            <th>Decisión</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resumenBody"></tbody>
-                </table>
-              </div>
-
-              <div id="resumenErrores" class="alert alert-warning d-none mb-0">
-                  Hay casos incompletos (faltan <b>criterio</b> o <b>decisión</b>). Corrija antes de continuar.
-              </div>
-          </div>
-
-          <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                  Regresar
-              </button>
-              <button type="button" class="btn btn-primary" id="btnContinuarFinalizacion">
-                  Continuar
-              </button>
-          </div>
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title">Resumen del Comité</h5>
       </div>
+
+      <div class="modal-body">
+        <div id="resumenErrores" class="alert alert-danger d-none">
+          Complete los campos obligatorios antes de continuar.
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>DNI</th>
+                <th>Cliente</th>
+                <th class="text-end">Monto</th>
+                <th>Tipo Cli</th>
+                <th>Criterio</th>
+                <th>Decisión</th>
+              </tr>
+            </thead>
+            <tbody id="resumenBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <!-- ✅ Regresar: NO submit -->
+        <button type="button" class="btn btn-outline-secondary" id="btnRegresarResumen">
+          ← Regresar
+        </button>
+
+        <button type="button" class="btn btn-success" id="btnContinuarFinalizacion">
+          Continuar →
+        </button>
+      </div>
+
+    </div>
   </div>
 </div>
+
 
 
 <!-- ============================= -->

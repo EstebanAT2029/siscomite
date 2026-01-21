@@ -63,12 +63,18 @@ class ComiteService
         ========================================================== */
         foreach ($casos as $c) {
 
+            // 🔹 NUEVO: criterio obligatorio
+            $idCriterio = !empty($c["id_criterio"]) ? (int)$c["id_criterio"] : null;
+            if (!$idCriterio) {
+                throw new Exception("Todos los casos deben tener un criterio seleccionado.");
+            }
+
             $idDecision = $this->mapDecision($c["decision"]);
 
             $idDetalle = $this->detalleModel->insertarDetalle([
                 "id_comite"             => $idComite,
                 "id_agencia"            => $agencia,
-                "correlativo"           => $correlativo, // ✅ MISMO PARA TODOS
+                "correlativo"           => $correlativo,
                 "dni"                   => $c["dni"],
                 "cadena"                => $c["cadena"],
                 "nombres"               => $c["nombres"],
@@ -79,6 +85,10 @@ class ComiteService
                 "id_of1"                => $of1,
                 "id_of2"                => $of2,
                 "id_jefe_agencia"       => $jefe,
+
+                // 🔹 NUEVO
+                "id_criterio"           => $idCriterio,
+
                 "id_decision"           => $idDecision,
                 "observaciones"         => $c["comentarios"]
             ]);
