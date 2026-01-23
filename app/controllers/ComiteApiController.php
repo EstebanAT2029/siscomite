@@ -93,5 +93,4 @@ class ComiteApiController
         echo json_encode($m->listarActivos());
     }
 
-
 }

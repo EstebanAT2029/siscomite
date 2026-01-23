@@ -67,7 +67,7 @@ class ComiteActaModel
                     d.dni,
                     d.nombres,
                     d.tipo_cli,
-                    d.tipo_credito,                 -- ✅ AQUI
+                    d.tipo_credito,
                     d.monto,
                     d.observaciones,
                     cc.codigo AS criterio_codigo,
