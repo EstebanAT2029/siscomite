@@ -57,8 +57,8 @@ class OficialesNegociosController
             }
 
             $insert = [
-                "apellidos"  => strtoupper(trim($data["apellidos"])),
-                "nombres"    => strtoupper(trim($data["nombres"])),
+                "apellidos"  => trim($data["apellidos"]),
+                "nombres"    => trim($data["nombres"]),
                 "cargo"      => trim($data["cargo"]),
                 "id_agencia" => (int) $data["id_agencia"]
             ];

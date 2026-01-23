@@ -1,28 +1,124 @@
 <?php require __DIR__ . '/../layout/header.php'; ?>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-
 <style>
+  /* =========================
+     Layout general
+  ========================== */
+  body.bg-light{
+    background: linear-gradient(135deg, #e7f2ec 0%, #d7e9df 100%);
+  }
+
+  textarea { resize: none; }
+
+  /* =========================
+     Encabezado del comité
+  ========================== */
+  .bloque-header {
+    background: #eef5ff;
+    border: 1px solid #d3e2ff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(15,23,42,.06);
+  }
+
+  /* =========================
+     Bloque caso (contenedor)
+  ========================== */
     .bloque-caso {
-        background: #f1f1f1;
-        border-left: 5px solid #0d6efd;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 20px;
+        background: #ffffff;                 /* fondo blanco para contraste */
+        padding: 16px;
+        margin-bottom: 18px;
+
+        /* Borde principal */
+        border: 2px solid #dbe7ff;            /* borde suave */
+        border-left: 6px solid #0d6efd;       /* corte azul marcado */
+
+        border-radius: 10px;
+
+        /* Sutil profundidad */
+        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.08);
     }
-    .bloque-header {
-        background: #eef5ff;
-        border: 1px solid #d3e2ff;
-        padding: 15px;
-        border-radius: 8px;
+
+
+  .titulo-caso {
+    font-weight: 800;
+    color: #0d6efd;
+    margin-bottom: 10px;
+    letter-spacing: .2px;
+  }
+
+  /* =========================
+     Inputs / Selects
+  ========================== */
+  .form-label{
+    font-weight: 700;
+    font-size: .9rem;
+    color: #334155;
+    margin-bottom: .35rem;
+  }
+
+  .form-control,
+  .form-select{
+    border-radius: 8px;
+    border: 1px solid #dbe2ea;
+    padding: .55rem .75rem;
+    transition: .15s ease;
+    background-color: #fff;
+  }
+
+  .form-control:focus,
+  .form-select:focus{
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 .2rem rgba(13,110,253,.12);
+  }
+
+  /* Invalid más elegante */
+  .is-invalid{
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 .2rem rgba(220,53,69,.12) !important;
+  }
+
+  /* Textarea más “pro” */
+  .comentarios{
+    min-height: 120px;
+    line-height: 1.35;
+  }
+
+  /* =========================
+     Cajas internas del template
+     (las que pusimos: border bg-white shadow-sm)
+  ========================== */
+  .shadow-sm{
+    box-shadow: 0 6px 18px rgba(15,23,42,.06) !important;
+  }
+
+  /* =========================
+     Responsive: móvil
+     - más espacio
+     - panel derecho baja y se ve ordenado
+  ========================== */
+  @media (max-width: 576px){
+    .bloque-header{ padding: 12px; }
+    .titulo-caso{ font-size: 1.05rem; }
+
+    .form-control,
+    .form-select{
+      padding: .6rem .75rem;
+      font-size: .95rem;
     }
-    .titulo-caso {
-        font-weight: bold;
-        color: #0d6efd;
-        margin-bottom: 10px;
-    }
-    textarea { resize: none; }
+
+    .comentarios{ min-height: 140px; }
+  }
+
+  /* =========================
+     Responsive: evitar desbordes en tablas/modales
+  ========================== */
+  .container{
+    max-width: 1200px;
+  }
 </style>
+
 
 <div class="container mt-4">
 
@@ -117,69 +213,92 @@
 
         <div class="row g-3">
 
-            <div class="col-md-2">
-                <label class="form-label">DNI</label>
-                <input type="text" class="form-control dni">
+            <!-- =========================
+                 CAJA IZQUIERDA (DATOS)
+                 Orden igual a tu imagen
+            ========================== -->
+            <div class="col-lg-9">
+                <div class="p-3 rounded-3 border bg-white shadow-sm">
+
+                    <!-- FILA 1: DNI | NOMBRES | CADENA -->
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">DNI del Cliente</label>
+                            <input type="text" class="form-control dni">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Apellidos y Nombres del Titular</label>
+                            <input type="text" class="form-control nombres">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Cadena Propuesta</label>
+                            <input type="text" class="form-control cadena">
+                        </div>
+                    </div>
+
+                    <!-- FILA 2: MONTO | TIPO CRÉDITO | TIPO CLI -->
+                    <div class="row g-3 mt-0">
+                        <div class="col-md-3">
+                            <label class="form-label">Monto Propuesto</label>
+                            <input type="text" class="form-control monto" step="0.01">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Producto / Sub Producto / Actividad Evaluada</label>
+                            <input type="text" class="form-control tipo_credito">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Tipif del Cliente</label>
+                            <input type="text" class="form-control tipo_cli">
+                        </div>
+                    </div>
+
+                    <!-- FILA 3: COMENTARIOS (ANCHO COMPLETO) -->
+                    <div class="row g-3 mt-0">
+                        <div class="col-12">
+                            <label class="form-label">Comentarios - Observaciones - Recomendaciones</label>
+                            <textarea class="form-control comentarios" rows="4"></textarea>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
-            <div class="col-md-2">
-                <label class="form-label">Cadena</label>
-                <input type="text" class="form-control cadena">
-            </div>
+            <!-- =========================
+                 CAJA DERECHA (SELECTS)
+                 Orden igual a tu imagen
+            ========================== -->
+            <div class="col-lg-3">
+                <div class="p-3 rounded-3 border bg-white shadow-sm h-100">
 
-            <div class="col-md-4">
-                <label class="form-label">Apellidos y Nombres</label>
-                <input type="text" class="form-control nombres">
-            </div>
+                    <div class="mb-3">
+                        <label class="form-label">Oficial Proponente</label>
+                        <select class="form-select oficial_prop">
+                            <option value="" selected disabled>Seleccione</option>
+                        </select>
+                    </div>
 
-            <div class="col-md-4">
-                <label class="form-label">Comentarios</label>
-                <textarea class="form-control comentarios" rows="3"></textarea>
-            </div>
+                    <div class="mb-3">
+                        <label class="form-label"><b>Criterio</b></label>
+                        <select class="form-select criterio" required>
+                            <option value="">Seleccione</option>
+                            <!-- Se llenará por JS: C1..C9 (value=id_criterio, texto=codigo) -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Decisión</label>
+                        <select class="form-select decision">
+                            <option value="">Seleccione</option>
+                            <option value="Aprobado">Aprobado</option>
+                            <option value="Observado">Observado</option>
+                            <option value="Denegado">Denegado</option>
+                        </select>
+                    </div>
 
-            <div class="col-md-3">
-                <label class="form-label">Monto Propuesto</label>
-                <input type="text" class="form-control monto" step="0.01">
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label">Tipo Cli</label>
-                <input type="text" class="form-control tipo_cli">
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Tipo Credito</label>
-                <input type="text" class="form-control tipo_credito">
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label">Oficial Proponente</label>
-                <select class="form-select oficial_prop">
-                    <option value="" selected disabled>Seleccione</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label"><b>Criterio</b></label>
-                <select class="form-select criterio" required>
-                    <option value="">Seleccione</option>
-                    <!-- Se llenará por JS: C1..C9 (value=id_criterio, texto=codigo) -->
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label">Decisión</label>
-                <select class="form-select decision">
-                    <option value="Aprobado">Aprobado</option>
-                    <option value="Observado">Observado</option>
-                    <option value="Denegado">Denegado</option>
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label fw-bold text-primary">Riesgo Vinculado C-8</label>
-                <select class="form-select sel-riesgo-c8">
-                    <option value="No">No</option>
-                    <option value="Si">Si</option>
-                </select>
+                </div>
             </div>
 
         </div>
@@ -189,6 +308,7 @@
 
     </div>
 </template>
+
 
 <!-- =============================================================== -->
 <!--  MODAL RIESGO VINCULADO                                         -->
@@ -410,7 +530,7 @@
     <div class="modal-content">
 
       <div class="modal-header bg-dark text-white">
-        <h5 class="modal-title">Resumen del Comité</h5>
+        <h5 class="modal-title">Resumen del Comité de Creditos, Revise antes de Confirmar...!!!</h5>
       </div>
 
       <div class="modal-body">
@@ -461,7 +581,6 @@
 <script src="assets/js/comite_form.js?v=<?php echo time(); ?>"></script>
 <script src="assets/js/comite_riesgo_validacion.js?v=<?php echo time(); ?>"></script>
 <script src="assets/js/comite_modalidad.js?v=<?php echo time(); ?>"></script>
-<script src="assets/js/comite_riesgo.js?v=<?php echo time(); ?>"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const btnFinalizar = document.getElementById("btnFinalizar");

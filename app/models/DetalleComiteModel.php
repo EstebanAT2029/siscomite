@@ -75,12 +75,14 @@ class DetalleComiteModel
             SELECT 
                 d.*,
                 ds.descripcion AS decision_desc,
-                CONCAT(o1.apellidos, ' ', o1.nombres) AS oficial_proponente_nombre
+                CONCAT(o1.apellidos, ' ', o1.nombres) AS oficial_proponente_nombre,
+                cc.codigo AS criterio_codigo
             FROM detalle_comite d
             LEFT JOIN decision ds 
                 ON ds.id = d.id_decision
             LEFT JOIN oficiales_negocios o1 
                 ON o1.id = d.id_oficial_proponente
+            LEFT JOIN criterios_comite cc ON cc.id = d.id_criterio
             WHERE d.id = ?
         ";
 
@@ -132,10 +134,12 @@ class DetalleComiteModel
     {
         $sql = "SELECT d.*, 
                     ds.descripcion AS decision_desc,
-                    CONCAT(o.apellidos, ' ', o.nombres) AS oficial_proponente_nombre
+                    CONCAT(o.apellidos, ' ', o.nombres) AS oficial_proponente_nombre,
+                    cc.codigo AS criterio_codigo
                 FROM detalle_comite d
                 LEFT JOIN decision ds ON ds.id = d.id_decision
                 LEFT JOIN oficiales_negocios o ON o.id = d.id_oficial_proponente
+                LEFT JOIN criterios_comite cc ON cc.id = d.id_criterio
                 WHERE d.id_comite = ?
                 ORDER BY d.id ASC";
 

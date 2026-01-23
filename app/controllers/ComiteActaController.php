@@ -112,18 +112,18 @@ class ComiteActaController
             $canvas->page_text(520, 820, "Página {PAGE_NUM} / {PAGE_COUNT}", $font, 9);
 
 
-            // 🔥 LIMPIAR ANTES DE STREAM
+            //LIMPIAR ANTES DE STREAM
             ob_end_clean();
 
             $dompdf->stream(
-                "Acta_Comite_{$idComite}.pdf",
+                "ACTA DE COMITÉ DE CRÉDITO N° {$idComite}.pdf",
                 ["Attachment" => true]
             );
             exit;
 
         } catch (Throwable $e) {
 
-            // 🚫 NUNCA HTML AQUÍ
+            //NUNCA HTML AQUÍ
             while (ob_get_level()) {
                 ob_end_clean();
             }
@@ -133,8 +133,6 @@ class ComiteActaController
             exit;
         }
     }
-
-
     /* ============================================================
        GENERAR HTML COMPLETO DEL ACTA
     ============================================================ */
@@ -175,7 +173,7 @@ class ComiteActaController
         TABLA DE CASOS
         ====================== */
         $tablaCasos = "";
-
+    
         foreach ($detalles as $detalle) {
 
             $ofP = $this->oficialModel->getById($detalle["id_oficial_proponente"]);
@@ -194,7 +192,9 @@ class ComiteActaController
                     <br><i>'.htmlspecialchars($modal['modalidad_proponente'] ?? '').'</i>
                 </td>
 
-                <td class="col-tipocredito">'.htmlspecialchars($detalle['tipo_credito']).'</td>
+                <td class="col-tipo_credito">'.htmlspecialchars($detalle['tipo_credito']).'</td>
+                <td class="col-criterio">'.htmlspecialchars($detalle['criterio_codigo'] ?? '-').'</td>
+
                 <td class="col-resolucion" style="text-align:center;">'.htmlspecialchars($detalle['decision_desc']).'</td>
             </tr>';
 
@@ -202,7 +202,7 @@ class ComiteActaController
             if (!empty(trim($detalle['observaciones']))) {
                 $tablaCasos .= '
                 <tr class="fila-observaciones">
-                    <td colspan="7">
+                    <td colspan="8">
                         <b>OBSERVACIONES:</b><br>
                         '.nl2br(htmlspecialchars($detalle['observaciones'])).'
                     </td>

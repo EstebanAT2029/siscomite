@@ -105,7 +105,7 @@ function validarCamposObligatorios(silent = false) {
 
     const casos = document.querySelectorAll(".caso-item");
     if (casos.length === 0) {
-        alert("⚠ Debe añadir al menos un caso antes de finalizar.");
+        alert("Debe añadir al menos un caso antes de finalizar.");
         return false;
     }
 
@@ -190,7 +190,7 @@ function validarObservacionesYConfirmar() {
     let hay = [...comentarios].some(c => c.value.trim() !== "");
 
     if (!hay) {
-        let continuar = confirm("⚠ No ingresó comentarios. ¿Desea continuar sin observaciones?");
+        let continuar = confirm("No ingresó comentarios. ¿Desea continuar sin observaciones?");
         if (!continuar) {
             comentarios[0]?.classList.add("is-invalid");
             comentarios[0]?.focus();
@@ -198,7 +198,7 @@ function validarObservacionesYConfirmar() {
         }
     }
 
-    // ✅ Si falta algo -> NO abrir modal
+    // Si falta algo -> NO abrir modal
     if (!validarCamposObligatorios()) return;
 
     // TODO OK → mostrar resumen / finalizar
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         e.preventDefault();
 
-        // ✅ Si falta algo -> NO abrir modal
+        // Si falta algo -> NO abrir modal
         if (!validarCamposObligatorios()) return;
 
         validarObservacionesYConfirmar();

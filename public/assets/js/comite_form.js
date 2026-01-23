@@ -4,47 +4,56 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     // Elementos principales
-    // ✅ Al cargar el formulario → hora del sistema
+    // Al cargar el formulario → hora del sistema
     actualizarHoraSistema(true);
 
     const selAgencia   = document.getElementById("agencia");
     const selOf1       = document.getElementById("oficial1");
     const selOf2       = document.getElementById("oficial2");
     const selJefe      = document.getElementById("jefe_ag");
-
+    let casoActualRV = null;
     // ============================================================
-    // 🔒 BLOQUEO DEFINITIVO: el modal resumen NO puede abrirse si falta algo
+    // BLOQUEO DEFINITIVO: el modal resumen NO puede abrirse si falta algo
     // (aunque otro script lo intente abrir)
     // ============================================================
     const modalResumenEl = document.getElementById("modalResumenComite");
 
-    if (modalResumenEl) {
+        if (modalResumenEl && !modalResumenEl.dataset.boundShow) {
         modalResumenEl.addEventListener("show.bs.modal", function (e) {
 
             // Si NO existe la función o NO pasa la validación -> NO ABRIR
             if (typeof validarCamposObligatorios !== "function" || !validarCamposObligatorios(true)) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
+            e.preventDefault();
+            e.stopImmediatePropagation();
 
-                // Por seguridad: limpiar cualquier backdrop colgado
-                setTimeout(() => {
-                    document.querySelectorAll(".modal-backdrop").forEach(b => b.remove());
-                    document.body.classList.remove("modal-open");
-                    document.body.style.removeProperty("padding-right");
-                }, 50);
+            // ✅ 1) Quitar foco de cualquier elemento dentro del modal
+            const active = document.activeElement;
+            if (active && modalResumenEl.contains(active)) active.blur();
 
-                return false;
+            // ✅ 2) Asegurar que el modal NO quede “medio abierto”
+            modalResumenEl.classList.remove("show");
+            modalResumenEl.style.display = "none";
+            modalResumenEl.setAttribute("aria-hidden", "true");
+
+            // ✅ 3) Limpiar backdrops/scroll (tu lógica)
+            setTimeout(() => {
+                document.querySelectorAll(".modal-backdrop").forEach(b => b.remove());
+                document.body.classList.remove("modal-open");
+                document.body.style.removeProperty("padding-right");
+                document.body.style.removeProperty("overflow");
+                document.documentElement.style.removeProperty("overflow");
+            }, 0);
+
+            return false;
             }
         });
+
+        modalResumenEl.dataset.boundShow = "1";
     }
-
-
-
-
     const btnEmpezar = document.getElementById("btnEmpezar");
     if (btnEmpezar) {
         btnEmpezar.addEventListener("click", () => {
-            // 🔒 No forzar, solo asegurar que exista
+            // No forzar, solo asegurar que exista
             actualizarHoraSistema(false);
         });
     }
@@ -62,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let oficialesGlobal = [];
     let jefesGlobal     = [];
-    let criteriosGlobal = []; // ✅ NUEVO
+    let criteriosGlobal = []; //NUEVO
     let numCaso = 0;
 
     /* ============================================================
@@ -143,14 +152,14 @@ document.addEventListener("DOMContentLoaded", () => {
         select.innerHTML = `<option value="">Seleccione</option>`;
     }
 
-    // ✅ NUEVO: llenar combo criterios (value=id, texto=codigo)
+    // NUEVO: llenar combo criterios (value=id, texto=codigo)
     function llenarComboCriterios(select) {
         if (!select) return;
         select.innerHTML = `<option value="">Seleccione</option>`;
         (criteriosGlobal || []).forEach(c => {
-            select.innerHTML += `<option value="${c.id}">${c.codigo}</option>`;
+            select.innerHTML += `<option value="${c.id}" data-codigo="${c.codigo}">${c.codigo}</option>`;
         });
-    }
+        }
 
     /* ============================================================
        Validación oficial1 != oficial2
@@ -179,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const select = casos[0].querySelector(".oficial_prop");
 
-            // ⚠️ SOLO si aún no tiene valor
+            // SOLO si aún no tiene valor
             if (!select.value) {
                 llenarCombo(select, filtrados, "id", "nombre");
             }
@@ -192,10 +201,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const select = caso.querySelector(".oficial_prop");
 
-            // 🔒 Si ya eligieron algo → NO TOCAR
+            // Si ya eligieron algo → NO TOCAR
             if (select.value) return;
 
-            // 🔓 Solo llenar si está vacío
+            // Solo llenar si está vacío
             llenarCombo(select, oficialesGlobal, "id", "nombre");
         });
     }
@@ -234,20 +243,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         divCaso.querySelector(".titulo-caso").textContent = `Caso ${numCaso}`;
 
-        // ✅ NUEVO: llenar criterios en este caso (antes de decisión)
+        // NUEVO: llenar criterios en este caso (antes de decisión)
         const selCriterio = divCaso.querySelector(".criterio");
         llenarComboCriterios(selCriterio);
 
         contCasos.appendChild(clone);
 
-        // 🔥 MUY IMPORTANTE:
+        // MUY IMPORTANTE:
         // recalcula los oficiales proponentes según
         // la cantidad total de casos existentes
         actualizarComboProponentes();
     });
 
     /* ============================================================
-       🔒 VALIDACIÓN FUERTE: si algo falta, NO mostrar modal resumen
+       VALIDACIÓN FUERTE: si algo falta, NO mostrar modal resumen
        (esto se ejecuta ANTES del resumen)
     ============================================================= */
     function validarTodoAntesDeResumen() {
@@ -260,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const casos = document.querySelectorAll(".caso-item");
         if (casos.length === 0) {
-            customAlert("⚠ Debe añadir al menos un caso.", "Validación");
+            customAlert("Debe añadir al menos un caso.", "Validación");
             return false;
         }
 
@@ -279,17 +288,17 @@ document.addEventListener("DOMContentLoaded", () => {
         casos.forEach((caso) => {
 
             const dni       = caso.querySelector(".dni");
-            const cadena    = caso.querySelector(".cadena"); // opcional (no lo marco)
+            const cadena    = caso.querySelector(".cadena");
             const nombres   = caso.querySelector(".nombres");
             const monto     = caso.querySelector(".monto");
             const tipoCli   = caso.querySelector(".tipo_cli");
-            const tipoCred  = caso.querySelector(".tipo_credito"); // opcional (no lo marco)
+            const tipoCred  = caso.querySelector(".tipo_credito");
             const ofProp    = caso.querySelector(".oficial_prop");
             const criterio  = caso.querySelector(".criterio");
             const decision  = caso.querySelector(".decision");
 
             // limpiar marcas previas
-            [dni, nombres, monto, tipoCli, ofProp, criterio, decision].forEach(limpiar);
+            [dni, nombres, cadena, monto, tipoCli, tipoCred, ofProp, criterio, decision].forEach(limpiar);
 
             // obligatorios mínimos
             if (!dni?.value?.trim()) marcar(dni);
@@ -302,7 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!tipoCli?.value?.trim()) marcar(tipoCli);
             if (!ofProp?.value?.trim()) marcar(ofProp);
 
-            // ✅ criterio obligatorio
+            // criterio obligatorio
             if (!criterio?.value?.trim()) marcar(criterio);
 
             // decisión (siempre trae valor, pero por seguridad)
@@ -310,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (hayError) {
-            customAlert("⚠ Hay campos obligatorios pendientes en uno o más casos.", "Validación");
+            customAlert("Hay campos obligatorios pendientes en uno o más casos.", "Validación");
             return false;
         }
 
@@ -319,15 +328,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ============================================================
        5. Finalizar Comité — LLAMADO DESDE validacion.js
-       ✅ Ahora: SOLO si valida todo → muestra modal resumen
+       Ahora: SOLO si valida todo → muestra modal resumen
     ============================================================= */
     window.finalizarComite = function () {
 
-        // 🔒 VALIDACIÓN DEFINITIVA (la fuerte)
+        // VALIDACIÓN DEFINITIVA (la fuerte)
         // Si falta algo -> NO mostrar modal resumen
         if (!validarTodoAntesDeResumen()) return;
 
-        // ✅ Recién aquí armamos el resumen
+        // Recién aquí armamos el resumen
         const ok = construirResumenAntesDeFinalizar();
         if (!ok) return;
 
@@ -343,13 +352,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     };
 
-
     // botón continuar dentro del modal
     document.getElementById("btnContinuarFinalizacion")?.addEventListener("click", () => {
         enviarComite();
     });
     // ============================================================
-    // 🔙 BOTÓN REGRESAR (FIX SCROLL DEFINITIVO)
+    // BOTÓN REGRESAR (FIX SCROLL DEFINITIVO)
     // ============================================================
     document.getElementById("btnRegresarResumen")?.addEventListener("click", () => {
 
@@ -359,7 +367,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const inst = bootstrap.Modal.getInstance(modalEl);
         if (inst) inst.hide();
 
-        // ✅ FIX DEFINITIVO: restaurar scroll
+        // FIX DEFINITIVO: restaurar scroll
         setTimeout(() => {
 
             // eliminar backdrops huérfanos
@@ -379,8 +387,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }, 350);
     });
-
-
 
     /* ============================================================
        Enviar comité (antes estaba dentro de finalizarComite)
@@ -430,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ============================================================
        Construye JSON
-       ✅ Agrega id_criterio por caso
+       Agrega id_criterio por caso
     ============================================================= */
     function armarJSON() {
 
@@ -452,7 +458,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 tipo_credito: caso.querySelector(".tipo_credito").value,
                 oficial_prop: caso.querySelector(".oficial_prop").value,
 
-                // ✅ NUEVO
                 id_criterio:  caso.querySelector(".criterio")?.value || "",
 
                 decision:     caso.querySelector(".decision").value,
@@ -473,7 +478,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ============================================================
-       ✅ Resumen modal (similar a tu 2da imagen)
+       Resumen modal (similar a tu 2da imagen)
        Nota: aquí ya no decide si abrir modal; eso lo decide validarTodoAntesDeResumen()
     ============================================================= */
     function construirResumenAntesDeFinalizar() {
@@ -491,7 +496,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const casos = document.querySelectorAll(".caso-item");
         if (casos.length === 0) {
-            customAlert("⚠ Debe añadir al menos un caso.", "Validación");
+            customAlert("Debe añadir al menos un caso.", "Validación");
             return false;
         }
 
@@ -504,7 +509,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const cliente = (caso.querySelector(".nombres")?.value || "").trim();
             const monto = (caso.querySelector(".monto")?.value || "").trim();
             const tipoCli = (caso.querySelector(".tipo_cli")?.value || "").trim();
-
+            const tipo_credito = (caso.querySelector(".tipo_credito")?.value || "").trim();
             const selCrit = caso.querySelector(".criterio");
             const idCrit = selCrit?.value || "";
             const critTxt = selCrit?.selectedOptions?.[0]?.textContent?.trim() || "";
@@ -521,6 +526,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <td>${cliente || '<span class="text-muted">—</span>'}</td>
               <td class="text-end">${fmtMonto(monto)}</td>
               <td>${tipoCli || '<span class="text-muted">—</span>'}</td>
+              <td>${tipo_credito || '<span class="text-muted">—</span>'}</td>
               <td>${badgeCriterio(critTxt || '-')}</td>
               <td>${badgeDecision(decTxt || '-')}</td>
             `;
@@ -571,7 +577,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const inputHora = document.getElementById("hora");
         if (!inputHora) return;
 
-        // ❗ Solo setear si está vacío o si se fuerza
+        // Solo setear si está vacío o si se fuerza
         if (inputHora.value && !force) return;
 
         const ahora = new Date();
@@ -581,7 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
         inputHora.value = `${hh}:${mm}`;
     }
     // ============================================================
-    // 🔒 RESTAURAR SCROLL SI EL MODAL SE CIERRA POR CUALQUIER MOTIVO
+    // RESTAURAR SCROLL SI EL MODAL SE CIERRA POR CUALQUIER MOTIVO
     // ============================================================
 
     if (modalResumenEl) {
@@ -596,7 +602,24 @@ document.addEventListener("DOMContentLoaded", () => {
             document.documentElement.style.removeProperty("overflow");
         });
     }
+    document.addEventListener("change", (e) => {
+    const el = e.target;
+    if (!el.classList.contains("criterio")) return;
 
+    const caso = el.closest(".caso-item");
+    if (!caso) return;
+
+    const opt = el.selectedOptions?.[0];
+    const codigo = (opt?.dataset?.codigo || opt?.textContent || "").trim().toUpperCase();
+
+    // Si es C8 => abrir modal vinculados
+    if (codigo === "C8" || codigo === "C-8") {
+        abrirModalRiesgoVinculado(caso);
+    } else {
+        // Si cambió a otro criterio => limpiar vinculados para evitar arrastre
+        caso.querySelector(".rv_json").value = "[]";
+    }
+    });
 });
 
 

@@ -24,6 +24,7 @@ class ActaPdfService
             $template->setValue("cadena#{$i}", $c["cadena"]);
             $template->setValue("cliente#{$i}", $c["nombres"] . "\n" . $c["dni"]);
             $template->setValue("tipo_cli#{$i}", $c["tipo_cli"]);
+            $template->setValue("criterio_codigo#{$i}", $c["criterio_codigo"]);
             $template->setValue("tipo_credito#{$i}", $c["tipo_credito"]);
             $template->setValue("monto#{$i}", number_format($c["monto"], 2));
             $template->setValue("resolucion#{$i}", strtoupper($c["decision"]));

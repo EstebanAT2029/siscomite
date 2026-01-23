@@ -85,10 +85,7 @@ class ComiteService
                 "id_of1"                => $of1,
                 "id_of2"                => $of2,
                 "id_jefe_agencia"       => $jefe,
-
-                // 🔹 NUEVO
                 "id_criterio"           => $idCriterio,
-
                 "id_decision"           => $idDecision,
                 "observaciones"         => $c["comentarios"]
             ]);

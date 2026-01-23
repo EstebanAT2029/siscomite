@@ -193,7 +193,7 @@ class ReporteModel
             WHERE d.id_agencia = ?
               AND a.id_zona = ?
 
-            ORDER BY c.fecha DESC, d.cadena ASC
+            ORDER BY c.fecha DESC
             LIMIT ? OFFSET ?
         ";
 
