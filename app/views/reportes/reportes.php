@@ -2,14 +2,14 @@
 
 <div class="container mt-4">
 
-    <h3>Reporte de Comité de Créditos</h3>
+    <h3>Reporte de Comité de Créditos por Agencia</h3>
 
     <!-- FILTROS -->
     <form method="GET" action="index.php" class="row g-3 mb-4">
         <input type="hidden" name="url" value="reportes">
 
         <div class="col-md-4">
-            <label class="form-label">Agencia</label>
+            <label class="form-label">Seleccione una Agencia y presion en Boton Buscar</label>
             <select name="agencia" class="form-select">
                 <option value="">Seleccione...</option>
                 <?php foreach ($agencias as $a): ?>
@@ -22,13 +22,7 @@
         </div>
 
         <div class="col-md-3 d-flex align-items-end">
-            <button class="btn btn-primary w-100">Buscar</button>
-        </div>
-
-        <div class="col-md-3 d-flex align-items-end">
-            <a href="index.php?url=reportes/general-excel" class="btn btn-success w-100">
-                📘 Reporte General
-            </a>
+            <button class="btn btn-primary w-100">Mostar Actas</button>
         </div>
 
     </form>

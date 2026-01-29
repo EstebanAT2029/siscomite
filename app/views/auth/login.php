@@ -223,6 +223,11 @@ body.bg-light {
 
 </head>
 <body class="bg-light">
+<?php if (isset($_GET['timeout']) && $_GET['timeout'] == 1): ?>
+  <div class="alert alert-warning">
+    Tu sesión expiró por inactividad (30 minutos). Vuelve a iniciar sesión.
+  </div>
+<?php endif; ?>
 
 <!-- CARD LOGIN -->
 <div class="login-card">

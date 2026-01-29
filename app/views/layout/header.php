@@ -30,20 +30,27 @@ if (!isset($_SESSION)) session_start();
             <span class="fw-semibold ms-2 text-white">Sistema de Comité de Créditos</span>
         </a>
 
+            <div class="d-flex align-items-center">
 
-        <div class="d-flex align-items-center">
+                <?php if (!empty($_SESSION["user"])): ?>
+                    <span class="navbar-user me-3">
+                        <i class="bi bi-person-circle me-1"></i>
+                        <?= htmlspecialchars($_SESSION["user"]["nombres"] . ' ' . $_SESSION["user"]["apellidos"]) ?>
+                    </span>
 
-            <?php if (!empty($_SESSION["user"])): ?>
-                <span class="navbar-user me-3">
-                    <i class="bi bi-person-circle me-1"></i> <?= $_SESSION["user"]["nombres"] ?>
-                </span>
+                    <?php if (!empty($_SESSION["zona_activa"]["nombre"])): ?>
+                        <span class="navbar-zona me-3">
+                            <i class="bi bi-geo-alt-fill me-1"></i>
+                            <?= htmlspecialchars($_SESSION["zona_activa"]["nombre"]) ?>
+                        </span>
+                    <?php endif; ?>
 
-                <a href="index.php?url=logout" class="btn btn-agro-logout btn-sm">
-                    Cerrar Sesión
-                </a>
-            <?php endif; ?>
+                    <a href="index.php?url=logout" class="btn btn-agro-logout btn-sm">
+                        Cerrar Sesión
+                    </a>
+                <?php endif; ?>
 
-        </div>
+            </div>
 
     </div>
 </nav>

@@ -15,6 +15,13 @@
     font-weight: 500;
     font-size: 0.95rem;
 }
+/* Usuario */
+.navbar-zona {
+    /*color: #e9f5ef;*/
+    color: #e4f30f;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
 
 /* BOTÓN CERRAR SESIÓN */
 .btn-agro-logout {
@@ -117,7 +124,7 @@
 
 /* Icon Colors */
 .icon-blue { background: #007bff; }
-.icon-dark { background: #2c3034; }
+.icon-dark { background: #373d42; }
 .icon-yellow { background: #FFC107; color: #473900 !important; }
 .icon-green { background: #006548; }
 
@@ -146,6 +153,27 @@
     border: none !important;
     color: #ffffff !important; /* TEXTO BLANCO PARA ALTA VISIBILIDAD */
     font-weight: 600;
+}
+.btn-panel-cyan {
+    background-color: #0dcaf0 !important;
+    border: none !important;
+    color: #212529 !important; /* TEXTO BLANCO PARA ALTA VISIBILIDAD */
+    font-weight: 600;
+}
+.icon-cyan {
+    background: #0dcaf0;
+    color: #212529;
+}
+.panel-card {
+    border-radius: 14px;
+    border: 1px solid #e6f2f4;
+    transition: all .25s ease;
+    background: #fff;
+}
+
+.panel-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0,0,0,.08);
 }
 /* ANIMACIÓN SISCOMITÉ EN EL NAVBAR */
 .nav-siscomite-anim {

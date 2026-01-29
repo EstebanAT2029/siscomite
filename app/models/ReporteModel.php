@@ -86,26 +86,28 @@ class ReporteModel
         $sql = "
             SELECT 
                 d.cadena AS Cadena,
+                CONCAT(u.apellidos, ' ', u.nombres) AS Oficial_Riesgos,
                 a.nombre_agencia AS Agencia,
                 d.dni AS DNI,
                 d.nombres AS Cliente,
+                d.tipo_cli AS TipoClie,
                 d.monto AS Monto,
-                c.fecha AS Fecha,
+                DATE_FORMAT(c.fecha, '%d/%m/%Y') AS Fecha,
+                cc.codigo AS Criterio,
                 ds.descripcion AS Resolucion,
                 d.observaciones AS Comentarios,
-                CONCAT(u.apellidos, ' ', u.nombres) AS Oficial_Riesgos,
                 CONCAT(op.apellidos, ' ', op.nombres) AS Oficial_Proponente,
                 d.correlativo AS Num_Acta,
 
-                rv.dni AS DNI_Vinculado,
-                CONCAT(rv.apellidos, ' ', rv.nombres) AS Nombres_Vinculado,
+                rv.dni AS DNI_RV,
+                CONCAT(rv.apellidos, ' ', rv.nombres) AS Nombres_RV,
                 rv.grado_consanguinidad AS Parentesco,
-                rv.domicilio_si AS Des_Vinculado,
-                rv.domicilio_texto AS Des_Domicilio_Vinculado,
-                rv.actividad_si AS Des_Actividad,
-                rv.actividad_texto AS Des_Actividad_Vinculado,
-                rv.predio_si AS Des_Predio,
-                rv.predio_texto AS Des_Predio_Vinculado
+                rv.domicilio_si AS RV_Por_Domicilio_,
+                rv.domicilio_texto AS Domicilio_RV,
+                rv.actividad_si AS RV_Por_Actividad,
+                rv.actividad_texto AS Actividad_RV,
+                rv.predio_si AS RV_Por_Predio,
+                rv.predio_texto AS Predio_RV
 
             FROM comite c
             JOIN detalle_comite d ON d.id_comite = c.id
@@ -116,6 +118,8 @@ class ReporteModel
             LEFT JOIN oficiales_negocios op
                 ON op.id = d.id_oficial_proponente
 
+            LEFT JOIN criterios_comite cc
+                ON cc.id = d.id_criterio
             LEFT JOIN riesgo_vinculado rv 
                 ON rv.id_detalle_comite = d.id
 
