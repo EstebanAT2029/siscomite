@@ -1,32 +1,15 @@
 <?php
+
+
 ini_set('session.cookie_httponly', 1);
 ini_set('session.use_strict_mode', 1);
 ini_set('session.cookie_samesite', 'Strict');
 ini_set('session.cookie_secure', 0); // en local (HTTPS = 1 en prod)
 session_start();
+require_once __DIR__ . '/../app/core/Auth.php';
 
-// Tiempo máximo de inactividad (30 minutos)
-$tiempo_inactivo = 2 * 60; // 1800 segundos
-
-// SOLO si está logueado (ajusta la clave)
-if (isset($_SESSION['usuario_id'])) {
-
-    if (isset($_SESSION['ultima_actividad']) &&
-        (time() - $_SESSION['ultima_actividad']) > $tiempo_inactivo) {
-
-        session_unset();
-        session_destroy();
-
-        header("Location: index.php?url=login&timeout=1");
-        exit;
-    }
-
-    // actualizar actividad SOLO si está logueado
-    $_SESSION['ultima_actividad'] = time();
-}
-
-// Actualizar tiempo de última actividad
-$_SESSION['ultima_actividad'] = time();
+// ✅ esto se ejecuta SIEMPRE
+Auth::enforceInactivityTimeout(1800);
 
 if (isset($_GET["debug_session"])) {
     echo "<pre>";

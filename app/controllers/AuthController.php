@@ -91,9 +91,16 @@ class AuthController
             exit;
         }
 
-        // Anti fuerza bruta
+        // Evitar ataques de fuerza bruta
         if (!isset($_SESSION["login_attempts"])) {
             $_SESSION["login_attempts"] = 0;
+        }
+
+        if ($_SESSION["login_attempts"] >= 5) {
+            sleep(2); // Anti brute force delay
+            $_SESSION["login_error"] = "Demasiados intentos. Intente nuevamente en unos minutos.";
+            header("Location: index.php?url=login");
+            exit;
         }
 
         if ($_SESSION["login_attempts"] >= 5) {

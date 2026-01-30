@@ -1,3 +1,11 @@
+:root {
+  --brand-primary: #0B5ED7;   /* Azul institucional */
+  --brand-success: #0F766E;   /* Verde riesgo */
+  --brand-warning: #F59E0B;   /* Amarillo control */
+  --brand-dark:    #1F2937;   /* Gris corporativo */
+
+  --icon-bg-soft:  #F1F5F9;   /* Fondo neutro */
+}
 /* NAVBAR CORPORATIVO AGROBANCO */
 .navbar-agro {
     background-color: #006548 !important;
@@ -109,24 +117,23 @@
     box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
-/* Iconos */
 .icon-box {
-    width: 55px;
-    height: 55px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto 10px;
-    font-size: 28px;
-    border-radius: 12px;
-    color: white;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 1.4rem;
+  background: var(--icon-bg-soft);
 }
 
-/* Icon Colors */
-.icon-blue { background: #007bff; }
-.icon-dark { background: #373d42; }
-.icon-yellow { background: #FFC107; color: #473900 !important; }
-.icon-green { background: #006548; }
+/* Variantes */
+.icon-primary { color: var(--brand-primary); }
+.icon-success { color: var(--brand-success); }
+.icon-warning { color: var(--brand-warning); }
+.icon-dark    { color: var(--brand-dark); }
 
 /* Botones corregidos con texto visible */
 .btn-panel-blue {
@@ -175,6 +182,15 @@
     transform: translateY(-4px);
     box-shadow: 0 12px 25px rgba(0,0,0,.08);
 }
+.panel-card .icon-box {
+  margin-bottom: 10px;
+  opacity: 0.95;
+}
+.panel-card:hover .icon-box {
+  transform: scale(1.05);
+  transition: all .2s ease;
+}
+
 /* ANIMACIÓN SISCOMITÉ EN EL NAVBAR */
 .nav-siscomite-anim {
     display: inline-flex;
