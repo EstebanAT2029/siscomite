@@ -92,5 +92,22 @@ class ComiteApiController
         header("Content-Type: application/json; charset=utf-8");
         echo json_encode($m->listarActivos());
     }
+    public function criteriosObservado()
+    {
+        requireLogin();
+        $m = new CriterioObservadoModel();
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode($m->listarActivos());
+        exit;
+    }
+
+    public function criteriosDenegado()
+    {
+        requireLogin();
+        $m = new CriterioDenegadoModel();
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode($m->listarActivos());
+        exit;
+    }
 
 }

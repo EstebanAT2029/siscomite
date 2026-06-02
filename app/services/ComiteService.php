@@ -57,7 +57,6 @@ class ComiteService
             $anioActual
         );
         $correlativo = str_pad($correlativo, 3, "0", STR_PAD_LEFT);
-
         /* =========================================================
            3. INSERTAR DETALLES (CASOS)
         ========================================================== */
@@ -65,29 +64,49 @@ class ComiteService
 
             // 🔹 NUEVO: criterio obligatorio
             $idCriterio = !empty($c["id_criterio"]) ? (int)$c["id_criterio"] : null;
+
             if (!$idCriterio) {
                 throw new Exception("Todos los casos deben tener un criterio seleccionado.");
             }
 
             $idDecision = $this->mapDecision($c["decision"]);
 
+            // 🔹 NUEVO: criterios según decisión
+            $idCriterioObservado = !empty($c["id_criterio_observado"])
+                ? (int)$c["id_criterio_observado"]
+                : null;
+
+            $idCriterioDenegado = !empty($c["id_criterio_denegado"])
+                ? (int)$c["id_criterio_denegado"]
+                : null;
+
+            if ($idDecision == 2 && !$idCriterioObservado) {
+                throw new Exception("Debe seleccionar criterio de observado.");
+            }
+
+            if ($idDecision == 3 && !$idCriterioDenegado) {
+                throw new Exception("Debe seleccionar criterio de denegado.");
+            }
+
             $idDetalle = $this->detalleModel->insertarDetalle([
-                "id_comite"             => $idComite,
-                "id_agencia"            => $agencia,
-                "correlativo"           => $correlativo,
-                "dni"                   => $c["dni"],
-                "cadena"                => $c["cadena"],
-                "nombres"               => $c["nombres"],
-                "monto"                 => $c["monto"],
-                "tipo_cli"              => $c["tipo_cli"],
-                "tipo_credito"          => $c["tipo_credito"],
-                "id_oficial_proponente" => $c["oficial_prop"],
-                "id_of1"                => $of1,
-                "id_of2"                => $of2,
-                "id_jefe_agencia"       => $jefe,
-                "id_criterio"           => $idCriterio,
-                "id_decision"           => $idDecision,
-                "observaciones"         => $c["comentarios"]
+                "id_comite"               => $idComite,
+                "id_agencia"              => $agencia,
+                "correlativo"             => $correlativo,
+                "dni"                     => $c["dni"],
+                "cadena"                  => $c["cadena"],
+                "nombres"                 => $c["nombres"],
+                "monto"                   => $c["monto"],
+                "tipo_cli"                => $c["tipo_cli"],
+                "tipo_credito"            => $c["tipo_credito"],
+                "id_oficial_proponente"   => $c["oficial_prop"],
+                "id_of1"                  => $of1,
+                "id_of2"                  => $of2,
+                "id_jefe_agencia"         => $jefe,
+                "id_criterio"             => $idCriterio,
+                "id_decision"             => $idDecision,
+                "id_criterio_observado"   => $idCriterioObservado,
+                "id_criterio_denegado"    => $idCriterioDenegado,
+                "observaciones"           => $c["comentarios"]
             ]);
 
             if (!$idDetalle) {

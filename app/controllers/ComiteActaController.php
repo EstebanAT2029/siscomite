@@ -203,7 +203,7 @@ class ComiteActaController
                 $tablaCasos .= '
                 <tr class="fila-observaciones">
                     <td colspan="8">
-                        <b>OBSERVACIONES:</b><br>
+                        <b>DETALLE:</b><br>
                         '.nl2br(htmlspecialchars($detalle['observaciones'])).'
                     </td>
                 </tr>';

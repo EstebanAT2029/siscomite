@@ -1,0 +1,304 @@
+[29-Jan-2026 22:40:45 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/nexustar/public_html/siscomite/app/config/Database.php:18
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/config/Database.php(18): mysqli->__construct()
+#1 /home/nexustar/public_html/siscomite/app/models/AuthModel.php(9): Database::getConnection()
+#2 /home/nexustar/public_html/siscomite/app/controllers/AuthController.php(9): AuthModel->__construct()
+#3 /home/nexustar/public_html/siscomite/public/index.php(79): AuthController->__construct()
+#4 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/config/Database.php on line 18
+[29-Jan-2026 22:40:48 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/nexustar/public_html/siscomite/app/config/Database.php:18
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/config/Database.php(18): mysqli->__construct()
+#1 /home/nexustar/public_html/siscomite/app/models/AuthModel.php(9): Database::getConnection()
+#2 /home/nexustar/public_html/siscomite/app/controllers/AuthController.php(9): AuthModel->__construct()
+#3 /home/nexustar/public_html/siscomite/public/index.php(79): AuthController->__construct()
+#4 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/config/Database.php on line 18
+[29-Jan-2026 22:42:03 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nexustar_comite.usuario_zona' doesn't exist in /home/nexustar/public_html/siscomite/app/models/AuthModel.php:84
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/AuthModel.php(84): mysqli->prepare()
+#1 /home/nexustar/public_html/siscomite/app/controllers/AuthController.php(128): AuthModel->getZonasByUsuario()
+#2 /home/nexustar/public_html/siscomite/public/index.php(80): AuthController->login()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/AuthModel.php on line 84
+[29-Jan-2026 22:42:11 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nexustar_comite.usuario_zona' doesn't exist in /home/nexustar/public_html/siscomite/app/models/AuthModel.php:84
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/AuthModel.php(84): mysqli->prepare()
+#1 /home/nexustar/public_html/siscomite/app/controllers/AuthController.php(128): AuthModel->getZonasByUsuario()
+#2 /home/nexustar/public_html/siscomite/public/index.php(80): AuthController->login()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/AuthModel.php on line 84
+[29-Jan-2026 23:01:44 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[29-Jan-2026 23:02:00 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[30-Jan-2026 17:45:35 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[31-Jan-2026 09:45:16 America/Lima] PHP Warning:  DOMDocument::loadXML(): StartTag: invalid element name in Entity, line: 1 in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 94
+[31-Jan-2026 09:45:16 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 197
+[31-Jan-2026 09:45:16 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 250
+[31-Jan-2026 09:45:16 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 289
+[31-Jan-2026 09:45:16 America/Lima] PHP Warning:  Attempt to read property "childNodes" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 290
+[31-Jan-2026 12:39:20 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[31-Jan-2026 12:39:48 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[31-Jan-2026 12:39:58 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[31-Jan-2026 12:40:05 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[04-Feb-2026 14:59:25 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[04-Feb-2026 14:59:49 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[04-Feb-2026 15:00:00 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[04-Feb-2026 15:00:04 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[05-Feb-2026 11:34:43 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[05-Feb-2026 11:34:51 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[06-Feb-2026 10:08:12 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[06-Feb-2026 10:08:28 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[06-Feb-2026 10:08:51 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[06-Feb-2026 10:12:55 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[06-Feb-2026 10:16:17 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[06-Feb-2026 10:16:36 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[06-Feb-2026 10:16:51 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[06-Feb-2026 10:17:38 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[09-Feb-2026 12:08:53 America/Lima] PHP Warning:  DOMDocument::loadXML(): StartTag: invalid element name in Entity, line: 1 in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 94
+[09-Feb-2026 12:08:53 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 197
+[09-Feb-2026 12:08:53 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 250
+[09-Feb-2026 12:08:53 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 289
+[09-Feb-2026 12:08:53 America/Lima] PHP Warning:  Attempt to read property "childNodes" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 290
+[09-Feb-2026 12:09:12 America/Lima] PHP Warning:  DOMDocument::loadXML(): StartTag: invalid element name in Entity, line: 1 in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 94
+[09-Feb-2026 12:09:12 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 197
+[09-Feb-2026 12:09:12 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 250
+[09-Feb-2026 12:09:12 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 289
+[09-Feb-2026 12:09:12 America/Lima] PHP Warning:  Attempt to read property "childNodes" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 290
+[09-Feb-2026 14:52:19 America/Lima] PHP Warning:  DOMDocument::loadXML(): StartTag: invalid element name in Entity, line: 1 in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 94
+[09-Feb-2026 14:52:19 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 197
+[09-Feb-2026 14:52:19 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 250
+[09-Feb-2026 14:52:19 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 289
+[09-Feb-2026 14:52:19 America/Lima] PHP Warning:  Attempt to read property "childNodes" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 290
+[24-Feb-2026 16:47:43 America/Lima] PHP Warning:  DOMDocument::loadXML(): StartTag: invalid element name in Entity, line: 1 in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 94
+[24-Feb-2026 16:47:43 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 197
+[24-Feb-2026 16:47:43 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 250
+[24-Feb-2026 16:47:43 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 289
+[24-Feb-2026 16:47:43 America/Lima] PHP Warning:  Attempt to read property "childNodes" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 290
+[05-Mar-2026 14:55:43 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[05-Mar-2026 14:55:50 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[11-Mar-2026 15:43:27 America/Lima] PHP Warning:  DOMDocument::loadXML(): StartTag: invalid element name in Entity, line: 1 in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 94
+[11-Mar-2026 15:43:27 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 197
+[11-Mar-2026 15:43:27 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 250
+[11-Mar-2026 15:43:27 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 289
+[11-Mar-2026 15:43:27 America/Lima] PHP Warning:  Attempt to read property "childNodes" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 290
+[11-Mar-2026 17:30:34 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[11-Mar-2026 17:30:44 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[13-Mar-2026 09:15:19 America/Lima] PHP Warning:  DOMDocument::loadXML(): StartTag: invalid element name in Entity, line: 1 in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 94
+[13-Mar-2026 09:15:19 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 197
+[13-Mar-2026 09:15:19 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 250
+[13-Mar-2026 09:15:19 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 289
+[13-Mar-2026 09:15:19 America/Lima] PHP Warning:  Attempt to read property "childNodes" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 290
+[17-Mar-2026 10:15:02 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[17-Mar-2026 10:15:10 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[18-Mar-2026 09:03:08 America/Lima] PHP Warning:  DOMDocument::loadXML(): StartTag: invalid element name in Entity, line: 1 in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 94
+[18-Mar-2026 09:03:08 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 197
+[18-Mar-2026 09:03:08 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 250
+[18-Mar-2026 09:03:08 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 289
+[18-Mar-2026 09:03:08 America/Lima] PHP Warning:  Attempt to read property "childNodes" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 290
+[19-Mar-2026 10:44:39 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[19-Mar-2026 10:44:48 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[26-Mar-2026 10:20:01 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[26-Mar-2026 10:20:08 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[26-Mar-2026 10:20:15 America/Lima] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`nexustar_comite`.`detalle_comite`, CONSTRAINT `detalle_comite_ibfk_6` FOREIGN KEY (`id_jefe_agencia`) REFERENCES `jefes_agencia` (`id`)) in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php:81
+Stack trace:
+#0 /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php(81): mysqli_stmt->execute()
+#1 /home/nexustar/public_html/siscomite/app/controllers/JefesAgenciaController.php(67): JefesAgenciaModel->eliminar()
+#2 /home/nexustar/public_html/siscomite/public/index.php(228): JefesAgenciaController->delete()
+#3 {main}
+  thrown in /home/nexustar/public_html/siscomite/app/models/JefesAgenciaModel.php on line 81
+[26-Mar-2026 12:52:24 America/Lima] PHP Warning:  DOMDocument::loadXML(): StartTag: invalid element name in Entity, line: 1 in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 94
+[26-Mar-2026 12:52:24 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 197
+[26-Mar-2026 12:52:24 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 250
+[26-Mar-2026 12:52:24 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 289
+[26-Mar-2026 12:52:24 America/Lima] PHP Warning:  Attempt to read property "childNodes" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 290
+[27-Mar-2026 16:06:17 America/Lima] PHP Warning:  DOMDocument::loadXML(): StartTag: invalid element name in Entity, line: 1 in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 94
+[27-Mar-2026 16:06:17 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 197
+[27-Mar-2026 16:06:17 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 250
+[27-Mar-2026 16:06:17 America/Lima] PHP Warning:  Attempt to read property "nodeName" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 289
+[27-Mar-2026 16:06:17 America/Lima] PHP Warning:  Attempt to read property "childNodes" on null in /home/nexustar/public_html/siscomite/vendor/phpoffice/phpword/src/PhpWord/Shared/Html.php on line 290

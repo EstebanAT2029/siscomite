@@ -113,6 +113,45 @@ document.addEventListener("DOMContentLoaded", () => {
         cargarJefes(id);
     });
 
+    let criteriosObservadoGlobal = [];
+    let criteriosDenegadoGlobal = [];
+    fetch("index.php?url=api/criterios-observado")
+        .then(res => res.json())
+        .then(data => {
+            criteriosObservadoGlobal = data || [];
+        })
+        .catch(err => {
+            console.error("Error cargando criterios observado:", err);
+            criteriosObservadoGlobal = [];
+        });
+
+    fetch("index.php?url=api/criterios-denegado")
+        .then(res => res.json())
+        .then(data => {
+            criteriosDenegadoGlobal = data || [];
+        })
+        .catch(err => {
+            console.error("Error cargando criterios denegado:", err);
+            criteriosDenegadoGlobal = [];
+        });
+
+        function llenarComboCriteriosObservado(select) {
+            if (!select) return;
+            select.innerHTML = `<option value="">Seleccione</option>`;
+            (criteriosObservadoGlobal || []).forEach(c => {
+                select.innerHTML += `<option value="${c.id}">${c.descripcion}</option>`;
+            });
+        }
+
+        function llenarComboCriteriosDenegado(select) {
+            if (!select) return;
+            select.innerHTML = `<option value="">Seleccione</option>`;
+            (criteriosDenegadoGlobal || []).forEach(c => {
+                select.innerHTML += `<option value="${c.id}">${c.descripcion}</option>`;
+            });
+        }
+
+
     function cargarOficiales(idAgencia) {
 
         fetch(`index.php?url=api/oficiales&agencia_id=${idAgencia}`)
@@ -157,7 +196,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!select) return;
         select.innerHTML = `<option value="">Seleccione</option>`;
         (criteriosGlobal || []).forEach(c => {
-            select.innerHTML += `<option value="${c.id}" data-codigo="${c.codigo}">${c.codigo}</option>`;
+            //select.innerHTML += `<option value="${c.id}" data-codigo="${c.codigo}">${c.codigo}</option>`;
+            const key = (c.codigo || "").toUpperCase().split("-")[0].trim(); // "C8"
+            select.innerHTML += `<option value="${c.id}" data-codigo="${c.codigo}" data-key="${key}">${c.codigo}</option>`;
         });
         }
 
@@ -253,6 +294,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // recalcula los oficiales proponentes según
         // la cantidad total de casos existentes
         actualizarComboProponentes();
+        const selCritObs = divCaso.querySelector(".criterio_observado");
+        const selCritDen = divCaso.querySelector(".criterio_denegado");
+
+        llenarComboCriteriosObservado(selCritObs);
+        llenarComboCriteriosDenegado(selCritDen);
     });
 
     /* ============================================================
@@ -461,6 +507,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 id_criterio:  caso.querySelector(".criterio")?.value || "",
 
                 decision:     caso.querySelector(".decision").value,
+                // ✅ NUEVOS
+                id_criterio_observado: caso.querySelector(".criterio_observado")?.value || "",
+                id_criterio_denegado: caso.querySelector(".criterio_denegado")?.value || "",
                 comentarios:  caso.querySelector(".comentarios").value,
                 vinculados:   vinculados
             });
@@ -611,15 +660,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const opt = el.selectedOptions?.[0];
     const codigo = (opt?.dataset?.codigo || opt?.textContent || "").trim().toUpperCase();
+    const key = (opt?.dataset?.key || "").trim().toUpperCase();
 
-    // Si es C8 => abrir modal vinculados
-    if (codigo === "C8" || codigo === "C-8") {
-        abrirModalRiesgoVinculado(caso);
+    // Si es C8 => abrir modal vinculado   
+
+    if (key === "C8") {
+    abrirModalRiesgoVinculado(caso);
     } else {
-        // Si cambió a otro criterio => limpiar vinculados para evitar arrastre
-        caso.querySelector(".rv_json").value = "[]";
+    caso.querySelector(".rv_json").value = "[]";
     }
     });
+    document.addEventListener("change", (e) => {
+        const el = e.target;
+        if (!el.classList.contains("decision")) return;
+
+        const caso = el.closest(".caso-item");
+        if (!caso) return;
+
+        const bloqueObs = caso.querySelector(".bloque-criterio-observado");
+        const bloqueDen = caso.querySelector(".bloque-criterio-denegado");
+        const selObs = caso.querySelector(".criterio_observado");
+        const selDen = caso.querySelector(".criterio_denegado");
+
+        bloqueObs.classList.add("d-none");
+        bloqueDen.classList.add("d-none");
+
+        selObs.value = "";
+        selDen.value = "";
+
+        if (el.value === "Observado") {
+            bloqueObs.classList.remove("d-none");
+        } else if (el.value === "Denegado") {
+            bloqueDen.classList.remove("d-none");
+        }
+    });
 });
-
-

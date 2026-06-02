@@ -122,6 +122,25 @@ function validarCamposObligatorios(silent = false) {
         const criterio     = caso.querySelector(".criterio");   // ✅ CRITERIO
         const decision     = caso.querySelector(".decision");
 
+        let criterioObs = caso.querySelector(".criterio_observado");
+        let criterioDen = caso.querySelector(".criterio_denegado");
+
+            // VALIDACIÓN OBSERVADO
+            if (decision.value === "Observado") {
+                if (!criterioObs.value.trim()) {
+                    criterioObs.classList.add("is-invalid");
+                    ok = false;
+                }
+            }
+
+            // VALIDACIÓN DENEGADO
+            if (decision.value === "Denegado") {
+                if (!criterioDen.value.trim()) {
+                    criterioDen.classList.add("is-invalid");
+                    ok = false;
+                }
+            }
+
         // ✅ Grupo obligatorio (incluye criterio)
         const obligatorios = [dni, cadena, nombres, monto, tipo_cli, tipo_credito, oficial_prop, criterio, decision];
 

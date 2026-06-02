@@ -153,7 +153,15 @@ if ($uri === "api/criterios") {
     requireLogin();
     return (new ComiteApiController())->criterios();
 }
+if ($uri === "api/criterios-observado") {
+    requireLogin();
+    return (new ComiteApiController())->criteriosObservado();
+}
 
+if ($uri === "api/criterios-denegado") {
+    requireLogin();
+    return (new ComiteApiController())->criteriosDenegado();
+}
 
 /* ======================================
    REPORTES
@@ -235,6 +243,7 @@ if ($uri === "comite/form") {
     requireLogin();
     return (new ComiteFormController())->showForm();
 }
+
 
 /* ======================================
    404

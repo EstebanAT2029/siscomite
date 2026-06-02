@@ -12,7 +12,7 @@ class Database
             $host = "localhost";
             $user = "root";
             $pass = "";
-            $dbname = "comite_creditos";
+            $dbname = "nexustar_comite";
             $port = 3306;
             
             self::$instance = new mysqli($host, $user, $pass, $dbname, $port);

@@ -288,6 +288,7 @@
                             <!-- Se llenará por JS: C1..C9 (value=id_criterio, texto=codigo) -->
                         </select>
                     </div>
+                    <!-- Criterio
                     <div>
                         <label class="form-label">Decisión</label>
                         <select class="form-select decision">
@@ -297,7 +298,29 @@
                             <option value="Denegado">Denegado</option>
                         </select>
                     </div>
+                    Campo oculto para almacenar los vinculados -->
+                    <div class="mb-3">
+                        <label class="form-label">Decisión</label>
+                        <select class="form-select decision">
+                            <option value="Aprobado">Aprobado</option>
+                            <option value="Observado">Observado</option>
+                            <option value="Denegado">Denegado</option>
+                        </select>
+                    </div>
 
+                    <div class="mb-3 bloque-criterio-observado d-none">
+                        <label class="form-label"><b>Criterio Observado</b></label>
+                        <select class="form-select criterio_observado">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 bloque-criterio-denegado d-none">
+                        <label class="form-label"><b>Criterio Denegado</b></label>
+                        <select class="form-select criterio_denegado">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -579,6 +602,7 @@
 <script src="assets/js/global-alerts.js?v=<?php echo time(); ?>"></script>
 <script src="assets/js/validacion.js?v=<?php echo time(); ?>"></script>
 <script src="assets/js/comite_form.js?v=<?php echo time(); ?>"></script>
+<script src="assets/js/comite_riesgo.js?v=<?php echo time(); ?>"></script>
 <script src="assets/js/comite_riesgo_validacion.js?v=<?php echo time(); ?>"></script>
 <script src="assets/js/comite_modalidad.js?v=<?php echo time(); ?>"></script>
 <script>

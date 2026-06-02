@@ -12,59 +12,63 @@ class DetalleComiteModel
     /* ============================================================
        INSERTAR DETALLE DEL COMITÉ
     ============================================================ */
-    public function insertarDetalle($data)
-    {
-        $sql = "INSERT INTO detalle_comite (
-            id_comite,
-            id_agencia,
-            correlativo,
-            dni,
-            cadena,
-            nombres,
-            monto,
-            tipo_cli,
-            tipo_credito,
-            id_oficial_proponente,
-            id_oficial_participante1,
-            id_oficial_participante2,
-            id_jefe_agencia,
-            id_criterio,
-            id_decision,
-            observaciones
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+public function insertarDetalle($data)
+{
+    $sql = "INSERT INTO detalle_comite (
+        id_comite,
+        id_agencia,
+        correlativo,
+        dni,
+        cadena,
+        nombres,
+        monto,
+        tipo_cli,
+        tipo_credito,
+        id_oficial_proponente,
+        id_oficial_participante1,
+        id_oficial_participante2,
+        id_jefe_agencia,
+        id_criterio,
+        id_decision,
+        id_criterio_observado,
+        id_criterio_denegado,
+        observaciones
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        $stmt = $this->db->prepare($sql);
+    $stmt = $this->db->prepare($sql);
 
-        if (!$stmt) {
-            throw new Exception("Error preparando insertarDetalle: " . $this->db->error);
-        }
-
-        $stmt->bind_param(
-            "iissssdsisiiiiis",
-            $data["id_comite"],
-            $data["id_agencia"],
-            $data["correlativo"],
-            $data["dni"],
-            $data["cadena"],
-            $data["nombres"],
-            $data["monto"],
-            $data["tipo_cli"],
-            $data["tipo_credito"],
-            $data["id_oficial_proponente"],
-            $data["id_of1"],
-            $data["id_of2"],
-            $data["id_jefe_agencia"],
-            $data["id_criterio"],
-            $data["id_decision"],
-            $data["observaciones"]
-        );
-
-        if (!$stmt->execute()) {
-            throw new Exception("Error insertando detalle: " . $stmt->error);
-        }
-
-        return $stmt->insert_id;
+    if (!$stmt) {
+        throw new Exception("Error preparando insertarDetalle: " . $this->db->error);
     }
+
+    $stmt->bind_param(
+        "iiisssdssiiiiiiiss",
+        $data["id_comite"],
+        $data["id_agencia"],
+        $data["correlativo"],
+        $data["dni"],
+        $data["cadena"],
+        $data["nombres"],
+        $data["monto"],
+        $data["tipo_cli"],
+        $data["tipo_credito"],
+        $data["id_oficial_proponente"],
+        $data["id_of1"],
+        $data["id_of2"],
+        $data["id_jefe_agencia"],
+        $data["id_criterio"],
+        $data["id_decision"],
+        $data["id_criterio_observado"],
+        $data["id_criterio_denegado"],
+        $data["observaciones"]
+    );
+
+    if (!$stmt->execute()) {
+        throw new Exception("Error insertando detalle: " . $stmt->error);
+    }
+
+    return $stmt->insert_id;
+}
 
     /* ============================================================
     TRAER DETALLE POR ID (para ACTA PDF / WORD)
