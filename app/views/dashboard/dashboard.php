@@ -93,7 +93,7 @@ require __DIR__ . "/../layout/header.php";
             </div>
             <h4 class="mb-1">Resumen del Mes</h4>
             <p class="text-muted">Indicadores y consolidado mensual</p>
-            <a href="#modalEnConstruccion" class="btn btn-panel-green w-100" data-bs-toggle="modal">Ver Resumen</a>
+            <a href="index.php?url=resumen/comites" class="btn btn-panel-green w-100">Ver Resumen</a>
         </div>
     </div>
 

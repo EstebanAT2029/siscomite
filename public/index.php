@@ -244,6 +244,39 @@ if ($uri === "comite/form") {
     return (new ComiteFormController())->showForm();
 }
 
+/* ======================================
+   RESUMEN DE COMITÉS NUEVO REPORTE DE RESUMEN
+====================================== */
+
+if ($uri === "resumen/comites") {
+    requireLogin();
+    return (new ResumenComiteController())->index();
+}
+
+if ($uri === "resumen/comites-data") {
+    requireLogin();
+    return (new ResumenComiteController())->data();
+}
+
+if ($uri === "resumen/comites-excel") {
+    requireLogin();
+    return (new ResumenComiteController())->exportarExcel();
+}
+
+if ($uri === "api/zonas-usuario") {
+    requireLogin();
+    return (new ResumenComiteController())->zonasUsuario();
+}
+
+if ($uri === "api/agencias-zona") {
+    requireLogin();
+    return (new ResumenComiteController())->agenciasZona();
+}
+
+if ($uri === "api/oficiales-zona") {
+    requireLogin();
+    return (new ResumenComiteController())->oficialesZona();
+}
 
 /* ======================================
    404

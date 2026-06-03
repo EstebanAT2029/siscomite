@@ -25,6 +25,7 @@ class ComiteService
 
         $usuarioId = $_SESSION["user"]["id"];
         $idZona    = $_SESSION["user"]["id_zona"] ?? null;
+        //$idZona = $_SESSION["zona_activa"] ?? null;
 
         $numeroCasos = count($casos);
 
@@ -36,7 +37,8 @@ class ComiteService
             "hora"         => $hora,
             "numero_casos" => $numeroCasos,
             "id_usuario"   => $usuarioId,
-            "id_zona"      => $idZona
+            "id_zona"      => $idZona,
+            "id_agencia"   => $agencia
         ];
 
         $idComite = $this->model->insertarComite($datosComite);

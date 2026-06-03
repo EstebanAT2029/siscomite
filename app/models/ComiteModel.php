@@ -11,36 +11,49 @@ class ComiteModel
 
     public function insertarComite($data)
     {
-        // Nos aseguramos de que existan todas las claves
         $fecha        = $data["fecha"];
         $hora         = $data["hora"];
         $numeroCasos  = $data["numero_casos"];
         $idUsuario    = $data["id_usuario"];
-        $idZona       = $data["id_zona"] ?? null;  // puede ser NULL
+        $idZona       = $data["id_zona"] ?? null;
+        $idAgencia    = $data["id_agencia"];
 
-        // Si tu tabla COMITE tiene la columna id_zona (como en tu screenshot):
-        $sql = "INSERT INTO comite (
-                    fecha, hora, numero_casos, id_usuario, id_zona
-                ) VALUES (?, ?, ?, ?, ?)";
+        $sql = "
+            INSERT INTO comite (
+                fecha,
+                hora,
+                numero_casos,
+                id_usuario,
+                id_zona,
+                id_agencia
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+        ";
 
         $stmt = $this->db->prepare($sql);
 
         if (!$stmt) {
-            throw new Exception("Error preparando insertarComite: " . $this->db->error);
+            throw new Exception(
+                "Error preparando insertarComite: " .
+                $this->db->error
+            );
         }
 
-        // s = string, i = int
         $stmt->bind_param(
-            "ssiii",
+            "ssiiii",
             $fecha,
             $hora,
             $numeroCasos,
             $idUsuario,
-            $idZona
+            $idZona,
+            $idAgencia
         );
 
         if (!$stmt->execute()) {
-            throw new Exception("Error ejecutando insertarComite: " . $stmt->error);
+            throw new Exception(
+                "Error ejecutando insertarComite: " .
+                $stmt->error
+            );
         }
 
         return $stmt->insert_id;

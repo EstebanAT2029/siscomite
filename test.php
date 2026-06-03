@@ -1,26 +1,15 @@
 <?php
 
-$usuarios = [
-    ["Hoyos Correa","Cristian","42281562","choyos@agrobanco.com.pe","999999999","choyos",3],
-];
+// Ingresa aquí la contraseña que deseas convertir a BCrypt
+$password = "admin123";
 
-foreach ($usuarios as $u) {
+// Generar hash BCrypt
+$hash = password_hash($password, PASSWORD_BCRYPT);
 
-    $hash = password_hash($u[2], PASSWORD_BCRYPT);
+// Mostrar resultados
+echo "<h3>Generador de Hash BCrypt</h3>";
+echo "<p><strong>Contraseña:</strong> " . htmlspecialchars($password) . "</p>";
+echo "<p><strong>Hash BCrypt:</strong></p>";
+echo "<textarea rows='3' cols='100'>" . $hash . "</textarea>";
 
-    echo "INSERT INTO usuarios 
-    (apellidos, nombres, dni, correo, telefono, usuario, password, estado, fecha_registro, rol, id_zona)
-    VALUES (
-        '{$u[0]}',
-        '{$u[1]}',
-        '{$u[2]}',
-        '{$u[3]}',
-        '{$u[4]}',
-        '{$u[5]}',
-        '{$hash}',
-        1,
-        NOW(),
-        'usuario',
-        {$u[6]}
-    );\n\n";
-}
+?>
