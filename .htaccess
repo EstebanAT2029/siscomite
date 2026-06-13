@@ -1,5 +1,5 @@
 RewriteEngine On
-
+DirectoryIndex public/index.php
 # No tocar directamente /app, /vendor, /config, etc. (por si no existe el .htaccess interno)
 RewriteRule ^(app|vendor|config|core|logs)/ - [F,L]
 
