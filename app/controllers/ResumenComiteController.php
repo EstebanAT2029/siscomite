@@ -199,7 +199,7 @@ class ResumenComiteController
                     $data["zonas"][0]
                 );
 
-            $zonaTexto =
+                $zonaTexto =
                 $zona["nombre"] ?? "";
         }
 
